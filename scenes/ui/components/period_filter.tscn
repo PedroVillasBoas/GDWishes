@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://5ft00bt4bpfy"]
+
+[ext_resource type="Script" uid="uid://c773hdldpk85y" path="res://scripts/ui/components/period_filter.gd" id="1_28687"]
+[ext_resource type="PackedScene" uid="uid://41qpkq4lvkru" path="res://scenes/ui/components/month_picker.tscn" id="1_uf6c5"]
+
+[node name="PeriodFilter" type="HBoxContainer" unique_id=1709396107]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 8
+script = ExtResource("1_28687")
+
+[node name="ModeSelect" type="OptionButton" parent="." unique_id=805512437]
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "Month"
+popup/item_0/id = 0
+popup/item_1/text = "Trimester"
+popup/item_1/id = 1
+popup/item_2/text = "Year"
+popup/item_2/id = 2
+popup/item_3/text = "All"
+popup/item_3/id = 3
+
+[node name="Picker" parent="." unique_id=561295435 instance=ExtResource("1_uf6c5")]
+layout_mode = 2

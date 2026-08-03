@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://b5inv8scietlv"]
+
+[ext_resource type="Script" uid="uid://dj1765dp48tlu" path="res://scripts/ui/components/toast.gd" id="1_e2t2j"]
+
+[node name="Toast" type="PanelContainer" unique_id=1683470382]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_e2t2j")
+
+[node name="Row" type="HBoxContainer" parent="." unique_id=863577180]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Message" type="Label" parent="Row" unique_id=1384391542]
+layout_mode = 2
+
+[node name="UndoButton" type="Button" parent="Row" unique_id=501572962]
+visible = false
+layout_mode = 2
+text = "Undo"

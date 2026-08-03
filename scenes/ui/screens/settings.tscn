@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://cwbcl7uqdne2g"]
+
+[ext_resource type="Script" uid="uid://cdv7vnk7vylhc" path="res://scripts/ui/screens/settings.gd" id="1_ghr4u"]
+
+[node name="Settings" type="VBoxContainer" unique_id=622029957]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 12
+script = ExtResource("1_ghr4u")
+
+[node name="Card" type="PanelContainer" parent="." unique_id=783818715]
+layout_mode = 2
+
+[node name="Grid" type="GridContainer" parent="Card" unique_id=1043955688]
+layout_mode = 2
+
+[node name="L1" type="Label" parent="Card/Grid" unique_id=1068878991]
+layout_mode = 2
+text = "Project Name"
+
+[node name="NameEdit" type="LineEdit" parent="Card/Grid" unique_id=941880326]
+layout_mode = 2
+
+[node name="L2" type="Label" parent="Card/Grid" unique_id=255982633]
+layout_mode = 2
+text = "Exchange rate USD -> BRL "
+
+[node name="RateEdit" type="LineEdit" parent="Card/Grid" unique_id=749088602]
+layout_mode = 2
+
+[node name="L3" type="Label" parent="Card/Grid" unique_id=13230796]
+layout_mode = 2
+text = "Base Income (USD)"
+
+[node name="SalaryUsdEdit" type="LineEdit" parent="Card/Grid" unique_id=1300428474]
+layout_mode = 2
+
+[node name="L4" type="Label" parent="Card/Grid" unique_id=261714904]
+layout_mode = 2
+text = "Base Income (BRL)"
+
+[node name="SalaryBrlEdit" type="LineEdit" parent="Card/Grid" unique_id=333382660]
+layout_mode = 2
+
+[node name="L5" type="Label" parent="Card/Grid" unique_id=917598107]
+layout_mode = 2
+text = "Hours per Day"
+
+[node name="HoursSpin" type="SpinBox" parent="Card/Grid" unique_id=592467126]
+layout_mode = 2
+min_value = 1.0
+max_value = 24.0
+value = 1.0
+
+[node name="Spacer" type="Control" parent="Card/Grid" unique_id=454920887]
+layout_mode = 2
+
+[node name="ApplyButton" type="Button" parent="Card/Grid" unique_id=1256686785]
+layout_mode = 2
+text = "Apply"
+
+[node name="ImportCard" type="PanelContainer" parent="." unique_id=950952665]
+layout_mode = 2
+
+[node name="ImpCol" type="VBoxContainer" parent="ImportCard" unique_id=483284025]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ImpTitle" type="Label" parent="ImportCard/ImpCol" unique_id=1435432461]
+layout_mode = 2
+text = "Migration"
+
+[node name="ImpHint" type="Label" parent="ImportCard/ImpCol" unique_id=1607645242]
+custom_minimum_size = Vector2(205, 50)
+layout_mode = 2
+text = "Import the CSVs exported from your Google Sheet."
+autowrap_mode = 3
+
+[node name="ImportButton" type="Button" parent="ImportCard/ImpCol" unique_id=1998939619]
+layout_mode = 2
+text = "Import folder of CSVs..."
+
+[node name="ImportDialog" type="FileDialog" parent="." unique_id=1713490039]
+oversampling_override = 1.0
+title = "Open a Directory"
+position = Vector2i(0, 36)
+visible = true
+file_mode = 2
+access = 2
+use_native_dialog = true

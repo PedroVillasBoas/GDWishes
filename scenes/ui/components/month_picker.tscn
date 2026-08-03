@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://41qpkq4lvkru"]
+
+[ext_resource type="Script" uid="uid://cy6g12exfn63r" path="res://scripts/ui/components/month_picker.gd" id="1_vc450"]
+
+[node name="MonthPicker" type="HBoxContainer" unique_id=561295435]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 4
+script = ExtResource("1_vc450")
+
+[node name="PrevButton" type="Button" parent="." unique_id=1117153813]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+text = "<"
+
+[node name="MonthLabel" type="Button" parent="." unique_id=1696544515]
+custom_minimum_size = Vector2(130, 32)
+layout_mode = 2
+flat = true
+
+[node name="NextButton" type="Button" parent="." unique_id=1185594955]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+text = ">"

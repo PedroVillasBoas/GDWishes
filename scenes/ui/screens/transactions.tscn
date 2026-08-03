@@ -1,0 +1,171 @@
+[gd_scene format=3 uid="uid://dsyehs3hee8wy"]
+
+[ext_resource type="Texture2D" uid="uid://bthdge3inx42o" path="res://assets/icons/search.svg" id="1_aqsrs"]
+[ext_resource type="Script" uid="uid://dlyfi3x76y22u" path="res://scripts/ui/screens/transactions.gd" id="1_j6yx8"]
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/plus.svg" id="2_o4pnw"]
+[ext_resource type="PackedScene" uid="uid://bqiwkci4ws2ub" path="res://scenes/ui/components/currency_input.tscn" id="3_g4uqo"]
+[ext_resource type="Texture2D" uid="uid://dk3slvhmtarj3" path="res://assets/icons/x.svg" id="5_bu8pt"]
+[ext_resource type="Texture2D" uid="uid://gliusom3320o" path="res://assets/icons/save.svg" id="6_rpqnb"]
+
+[node name="Transactions" type="VBoxContainer" unique_id=143958874]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 12
+script = ExtResource("1_j6yx8")
+
+[node name="Toolbar" type="HBoxContainer" parent="." unique_id=1352285233]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SearchEdit" type="LineEdit" parent="Toolbar" unique_id=38820085]
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+placeholder_text = "Search..."
+right_icon = ExtResource("1_aqsrs")
+
+[node name="TypeFilter" type="OptionButton" parent="Toolbar" unique_id=1880563128]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "All"
+popup/item_0/id = 0
+popup/item_1/text = "Entries"
+popup/item_1/id = 1
+popup/item_2/text = "Outputs"
+popup/item_2/id = 2
+
+[node name="CategoryFilter" type="OptionButton" parent="Toolbar" unique_id=1411504197]
+layout_mode = 2
+selected = 0
+search_bar_enabled = true
+item_count = 1
+popup/item_0/text = "All Categories"
+popup/item_0/id = 0
+
+[node name="HSpacer" type="Control" parent="Toolbar" unique_id=1891716519]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddButton" type="Button" parent="Toolbar" unique_id=921698445]
+layout_mode = 2
+text = "New Entry"
+icon = ExtResource("2_o4pnw")
+
+[node name="Table" type="Tree" parent="." unique_id=1200422847]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 8
+column_titles_visible = true
+hide_root = true
+
+[node name="FormPanel" type="PanelContainer" parent="." unique_id=143195428]
+layout_mode = 2
+
+[node name="Form" type="VBoxContainer" parent="FormPanel" unique_id=1521442024]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="FormTitle" type="Label" parent="FormPanel/Form" unique_id=1590917331]
+layout_mode = 2
+text = "New Entry"
+
+[node name="Grid" type="GridContainer" parent="FormPanel/Form" unique_id=499726771]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 4
+
+[node name="L1" type="Label" parent="FormPanel/Form/Grid" unique_id=1485204667]
+layout_mode = 2
+text = "Description"
+
+[node name="DescEdit" type="LineEdit" parent="FormPanel/Form/Grid" unique_id=1775478337]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Entry's Description"
+
+[node name="L2" type="Label" parent="FormPanel/Form/Grid" unique_id=1530979176]
+layout_mode = 2
+text = "Type"
+
+[node name="TypeSelect" type="OptionButton" parent="FormPanel/Form/Grid" unique_id=2025219490]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Entry"
+popup/item_0/id = 0
+popup/item_1/text = "Output"
+popup/item_1/id = 1
+
+[node name="L3" type="Label" parent="FormPanel/Form/Grid" unique_id=1490096359]
+layout_mode = 2
+text = "Value"
+
+[node name="CurrencyInput" parent="FormPanel/Form/Grid" unique_id=1389215392 instance=ExtResource("3_g4uqo")]
+layout_mode = 2
+
+[node name="L4" type="Label" parent="FormPanel/Form/Grid" unique_id=1687218412]
+layout_mode = 2
+text = "Category"
+
+[node name="CategorySelect" type="OptionButton" parent="FormPanel/Form/Grid" unique_id=1305353948]
+layout_mode = 2
+
+[node name="L5" type="Label" parent="FormPanel/Form/Grid" unique_id=1663322196]
+layout_mode = 2
+text = "Method"
+
+[node name="MethodSelect" type="OptionButton" parent="FormPanel/Form/Grid" unique_id=537823536]
+layout_mode = 2
+selected = 0
+item_count = 4
+popup/item_0/text = "Credit"
+popup/item_0/id = 0
+popup/item_1/text = "Debit"
+popup/item_1/id = 1
+popup/item_2/text = "Pix"
+popup/item_2/id = 2
+popup/item_3/text = "Cash"
+popup/item_3/id = 3
+
+[node name="L6" type="Label" parent="FormPanel/Form/Grid" unique_id=235896494]
+layout_mode = 2
+text = "Installments"
+
+[node name="InstallmentsSpin" type="SpinBox" parent="FormPanel/Form/Grid" unique_id=1322896686]
+layout_mode = 2
+max_value = 48.0
+custom_arrow_step = 1.0
+
+[node name="L7" type="Label" parent="FormPanel/Form/Grid" unique_id=77648959]
+layout_mode = 2
+text = "Date"
+
+[node name="DateEdit" type="LineEdit" parent="FormPanel/Form/Grid" unique_id=123049669]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "YYYY-MM-DD"
+
+[node name="L8" type="Label" parent="FormPanel/Form/Grid" unique_id=1572891698]
+layout_mode = 2
+text = "Notes"
+
+[node name="NotesEdit" type="LineEdit" parent="FormPanel/Form/Grid" unique_id=975396328]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Some note..."
+
+[node name="FormButtons" type="HBoxContainer" parent="FormPanel/Form" unique_id=547421748]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="CancelButton" type="Button" parent="FormPanel/Form/FormButtons" unique_id=412431487]
+layout_mode = 2
+text = "Cancel"
+icon = ExtResource("5_bu8pt")
+
+[node name="SaveTxButton" type="Button" parent="FormPanel/Form/FormButtons" unique_id=1818629421]
+layout_mode = 2
+text = "Save"
+icon = ExtResource("6_rpqnb")

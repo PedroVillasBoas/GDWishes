@@ -1,0 +1,151 @@
+[gd_scene format=3 uid="uid://cadpm6q1seqwm"]
+
+[ext_resource type="PackedScene" uid="uid://bjd8pk5845kkd" path="res://scenes/ui/components/stat_card.tscn" id="1_bijde"]
+[ext_resource type="Script" uid="uid://dtcpb17ik43fy" path="res://scripts/ui/screens/dashboard.gd" id="1_bxs3l"]
+[ext_resource type="Script" uid="uid://b02tvbmn44nj4" path="res://scripts/charts/line_chart.gd" id="2_ojs16"]
+[ext_resource type="Script" uid="uid://ba5foc01dnfq" path="res://scripts/charts/donut_chart.gd" id="3_dr1gr"]
+[ext_resource type="Script" uid="uid://odm0k2wl4lct" path="res://scripts/charts/bar_chart.gd" id="4_bxs3l"]
+
+[node name="Dashboard" type="ScrollContainer" unique_id=830366657]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bxs3l")
+
+[node name="Col" type="VBoxContainer" parent="." unique_id=1842542747]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="StatsRow" type="HBoxContainer" parent="Col" unique_id=1975581210]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CardBalance" parent="Col/StatsRow" unique_id=811790385 instance=ExtResource("1_bijde")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CardFree" parent="Col/StatsRow" unique_id=436673808 instance=ExtResource("1_bijde")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CardIncome" parent="Col/StatsRow" unique_id=1700722923 instance=ExtResource("1_bijde")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CardExpense" parent="Col/StatsRow" unique_id=1161005747 instance=ExtResource("1_bijde")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ChartsRow" type="HBoxContainer" parent="Col" unique_id=608991701]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="LinePanel" type="PanelContainer" parent="Col/ChartsRow" unique_id=640453768]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.6
+
+[node name="LineCol" type="VBoxContainer" parent="Col/ChartsRow/LinePanel" unique_id=1132149585]
+layout_mode = 2
+
+[node name="LineTitle" type="Label" parent="Col/ChartsRow/LinePanel/LineCol" unique_id=1980846858]
+layout_mode = 2
+text = "Balance Evolution"
+
+[node name="Line" type="Control" parent="Col/ChartsRow/LinePanel/LineCol" unique_id=1185772738]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 2
+script = ExtResource("2_ojs16")
+
+[node name="SidePanel" type="VBoxContainer" parent="Col/ChartsRow" unique_id=1367249904]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+theme_override_constants/separation = 16
+
+[node name="WishesPanel" type="PanelContainer" parent="Col/ChartsRow/SidePanel" unique_id=1304274794]
+layout_mode = 2
+
+[node name="WishesCol" type="VBoxContainer" parent="Col/ChartsRow/SidePanel/WishesPanel" unique_id=490725438]
+layout_mode = 2
+
+[node name="WishTitle" type="Label" parent="Col/ChartsRow/SidePanel/WishesPanel/WishesCol" unique_id=204482808]
+layout_mode = 2
+text = "Top Wishes"
+
+[node name="WishList" type="VBoxContainer" parent="Col/ChartsRow/SidePanel/WishesPanel/WishesCol" unique_id=275289028]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LimitsPanel" type="PanelContainer" parent="Col/ChartsRow/SidePanel" unique_id=2063722302]
+layout_mode = 2
+
+[node name="LimCol" type="VBoxContainer" parent="Col/ChartsRow/SidePanel/LimitsPanel" unique_id=1289026106]
+layout_mode = 2
+
+[node name="LimTitle" type="Label" parent="Col/ChartsRow/SidePanel/LimitsPanel/LimCol" unique_id=1320355540]
+layout_mode = 2
+text = "Montly Limits"
+
+[node name="LimList" type="VBoxContainer" parent="Col/ChartsRow/SidePanel/LimitsPanel/LimCol" unique_id=788245743]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ChartsRow2" type="HBoxContainer" parent="Col" unique_id=241356658]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DonutPanel" type="PanelContainer" parent="Col/ChartsRow2" unique_id=107649307]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DonutCol" type="VBoxContainer" parent="Col/ChartsRow2/DonutPanel" unique_id=900676445]
+layout_mode = 2
+
+[node name="DonutTitle" type="Label" parent="Col/ChartsRow2/DonutPanel/DonutCol" unique_id=610685406]
+layout_mode = 2
+text = "Spending by Category"
+
+[node name="Donut" type="Control" parent="Col/ChartsRow2/DonutPanel/DonutCol" unique_id=1234532706]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+script = ExtResource("3_dr1gr")
+
+[node name="BarPanel" type="PanelContainer" parent="Col/ChartsRow2" unique_id=495959666]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BarCol" type="VBoxContainer" parent="Col/ChartsRow2/BarPanel" unique_id=1982342893]
+layout_mode = 2
+
+[node name="BarTitle" type="Label" parent="Col/ChartsRow2/BarPanel/BarCol" unique_id=1843767816]
+layout_mode = 2
+text = "Inputs × Outputs"
+
+[node name="Bars" type="Control" parent="Col/ChartsRow2/BarPanel/BarCol" unique_id=1726843709]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+script = ExtResource("4_bxs3l")
+
+[node name="CashflowPanel" type="PanelContainer" parent="Col" unique_id=570185772]
+layout_mode = 2
+
+[node name="CfCol" type="VBoxContainer" parent="Col/CashflowPanel" unique_id=1479041272]
+layout_mode = 2
+
+[node name="CfTitle" type="Label" parent="Col/CashflowPanel/CfCol" unique_id=1772733260]
+layout_mode = 2
+text = "Cash Flow (with projection)"
+
+[node name="CfTable" type="Tree" parent="Col/CashflowPanel/CfCol" unique_id=1077395493]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+column_titles_visible = true
+hide_root = true

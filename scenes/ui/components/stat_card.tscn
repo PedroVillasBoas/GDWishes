@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bjd8pk5845kkd"]
+
+[ext_resource type="Script" uid="uid://c6xfw825brqwx" path="res://scripts/ui/components/stat_card.gd" id="1_i11k3"]
+
+[node name="StatCard" type="PanelContainer" unique_id=811790385]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_i11k3")
+
+[node name="Col" type="VBoxContainer" parent="." unique_id=2140215588]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Col" unique_id=25064162]
+layout_mode = 2
+
+[node name="Value" type="Label" parent="Col" unique_id=1132956612]
+layout_mode = 2

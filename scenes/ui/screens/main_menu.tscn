@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://clc3sywdiv3mw"]
+
+[ext_resource type="Script" uid="uid://clkxpx21wa5yx" path="res://scripts/ui/screens/main_menu.gd" id="1_j84ir"]
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/plus.svg" id="1_nee2d"]
+[ext_resource type="Texture2D" uid="uid://b6tbwsrx3kxwt" path="res://assets/icons/folder.svg" id="2_j84ir"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_m0oku"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(700, 400, 1)
+gravity = Vector3(0, -4, 0)
+linear_accel_min = 1.9999977
+linear_accel_max = 5.9999976
+scale_min = 2.0
+scale_max = 4.0
+color = Color(0.4862745, 0.43529412, 0.9411765, 0.24705882)
+
+[node name="MainMenu" type="Control" unique_id=668298992]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j84ir")
+
+[node name="Particles" type="GPUParticles2D" parent="." unique_id=1007105870]
+position = Vector2(640, 360)
+amount = 40
+lifetime = 12.0
+preprocess = 12.0
+visibility_rect = Rect2(-700, -400, 1400, 800)
+process_material = SubResource("ParticleProcessMaterial_m0oku")
+
+[node name="Center" type="CenterContainer" parent="." unique_id=394079609]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Column" type="VBoxContainer" parent="Center" unique_id=1365838511]
+custom_minimum_size = Vector2(420, 0)
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Logo" type="Label" parent="Center/Column" unique_id=1028715468]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+text = "GDWishes"
+horizontal_alignment = 1
+
+[node name="Tagline" type="Label" parent="Center/Column" unique_id=1616197827]
+layout_mode = 2
+text = "Your finances. Your Wishes."
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Center/Column" unique_id=1536313004]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+
+[node name="NewButton" type="Button" parent="Center/Column" unique_id=1660357894]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "New Project"
+icon = ExtResource("1_nee2d")
+
+[node name="OpenButton" type="Button" parent="Center/Column" unique_id=1072655052]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Open Project"
+icon = ExtResource("2_j84ir")
+
+[node name="RecentTitle" type="Label" parent="Center/Column" unique_id=884835405]
+layout_mode = 2
+text = "Recent"
+
+[node name="RecentList" type="VBoxContainer" parent="Center/Column" unique_id=507961570]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="OpenDialog" type="FileDialog" parent="." unique_id=8767288]
+title = "Open a File"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.gdwishes", "Projeto GDWishes")
+use_native_dialog = true
+
+[node name="NewDialog" type="ConfirmationDialog" parent="." unique_id=2116070837]
+oversampling_override = 1.0
+title = "New Project"
+position = Vector2i(0, 36)
+size = Vector2i(200, 205)
+ok_button_text = "Create"
+
+[node name="Form" type="VBoxContainer" parent="NewDialog" unique_id=601209813]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 192.0
+offset_bottom = 156.0
+theme_override_constants/separation = 10
+
+[node name="NameLabel" type="Label" parent="NewDialog/Form" unique_id=1115250690]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Project Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameEdit" type="LineEdit" parent="NewDialog/Form" unique_id=1819690886]
+layout_mode = 2
+placeholder_text = "Project Wish"
+
+[node name="MonthLabel" type="Label" parent="NewDialog/Form" unique_id=1638104129]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Initial Month"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MonthEdit" type="LineEdit" parent="NewDialog/Form" unique_id=1310562243]
+layout_mode = 2
+placeholder_text = "YYYY-MM"

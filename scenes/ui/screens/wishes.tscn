@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://cva36r05rotsj"]
+
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/plus.svg" id="1_7yk3f"]
+[ext_resource type="Script" uid="uid://b2bdfk6gib7eb" path="res://scripts/ui/screens/wishes.gd" id="1_gyfhh"]
+
+[sub_resource type="Curve" id="Curve_gyfhh"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 0.5533981), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Wishes" type="VBoxContainer" unique_id=1897533377]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 12
+script = ExtResource("1_gyfhh")
+
+[node name="Toolbar" type="HBoxContainer" parent="." unique_id=681029460]
+layout_mode = 2
+
+[node name="ShowArchived" type="CheckBox" parent="Toolbar" unique_id=2005280353]
+layout_mode = 2
+text = "Show Archived"
+
+[node name="HSpacer" type="Control" parent="Toolbar" unique_id=1174923394]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddWishButton" type="Button" parent="Toolbar" unique_id=699741235]
+layout_mode = 2
+text = "New Wish"
+icon = ExtResource("1_7yk3f")
+
+[node name="Scroll" type="ScrollContainer" parent="." unique_id=1583267687]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CardGrid" type="GridContainer" parent="Scroll" unique_id=421327068]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 3
+
+[node name="WishDialog" type="ConfirmationDialog" parent="." unique_id=1799876365]
+oversampling_override = 1.0
+title = "Wish"
+position = Vector2i(0, 36)
+size = Vector2i(300, 252)
+ok_button_text = "Save"
+
+[node name="Form" type="VBoxContainer" parent="WishDialog" unique_id=838743054]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 292.0
+offset_bottom = 203.0
+theme_override_constants/separation = 10
+
+[node name="NameEdit" type="LineEdit" parent="WishDialog/Form" unique_id=546379332]
+layout_mode = 2
+placeholder_text = "Wish Name"
+
+[node name="ParentSelect" type="OptionButton" parent="WishDialog/Form" unique_id=1458293090]
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "Single Wish"
+popup/item_0/id = 0
+
+[node name="CompositeCheck" type="CheckBox" parent="WishDialog/Form" unique_id=1670655786]
+layout_mode = 2
+text = "Composite Wish"
+
+[node name="GoalEdit" type="LineEdit" parent="WishDialog/Form" unique_id=1901929592]
+layout_mode = 2
+placeholder_text = "Goal (R$)"
+
+[node name="TargetEdit" type="LineEdit" parent="WishDialog/Form" unique_id=1598603561]
+layout_mode = 2
+placeholder_text = "Target Month YYYY-MM (Optional)"
+
+[node name="DepositDialog" type="ConfirmationDialog" parent="." unique_id=1757256134]
+oversampling_override = 1.0
+title = "Aport"
+position = Vector2i(0, 36)
+size = Vector2i(270, 162)
+ok_button_text = "Aport"
+
+[node name="Form" type="VBoxContainer" parent="DepositDialog" unique_id=876830586]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 262.0
+offset_bottom = 113.0
+theme_override_constants/separation = 10
+
+[node name="AmountEdit" type="LineEdit" parent="DepositDialog/Form" unique_id=1376308415]
+layout_mode = 2
+placeholder_text = "Value (negative = withdrawal)"
+
+[node name="MonthEdit" type="LineEdit" parent="DepositDialog/Form" unique_id=1103344624]
+layout_mode = 2
+placeholder_text = "YYYY-MM"
+
+[node name="FreeBalanceLabel" type="Label" parent="DepositDialog/Form" unique_id=507988758]
+layout_mode = 2
+
+[node name="DetailDialog" type="AcceptDialog" parent="." unique_id=159519808]
+oversampling_override = 1.0
+title = "Details"
+size = Vector2i(476, 203)
+ok_button_text = "Close"
+
+[node name="Col" type="VBoxContainer" parent="DetailDialog" unique_id=709698782]
+custom_minimum_size = Vector2(460, 0)
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 468.0
+offset_bottom = 154.0
+theme_override_constants/separation = 10
+
+[node name="HistoryTitle" type="Label" parent="DetailDialog/Col" unique_id=404658214]
+layout_mode = 2
+text = "Aport History"
+
+[node name="HistoryList" type="VBoxContainer" parent="DetailDialog/Col" unique_id=1890690914]
+layout_mode = 2
+
+[node name="Sep" type="HSeparator" parent="DetailDialog/Col" unique_id=407892447]
+layout_mode = 2
+
+[node name="SimTitle" type="Label" parent="DetailDialog/Col" unique_id=322909972]
+layout_mode = 2
+text = "Simulator"
+
+[node name="SimRow" type="HBoxContainer" parent="DetailDialog/Col" unique_id=977047865]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SimLabel" type="Label" parent="DetailDialog/Col/SimRow" unique_id=2037373257]
+layout_mode = 2
+text = "Monthly Aport:"
+
+[node name="SimSlider" type="HSlider" parent="DetailDialog/Col/SimRow" unique_id=1274232210]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1000000.0
+
+[node name="SimValue" type="Label" parent="DetailDialog/Col/SimRow" unique_id=338724082]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "0,00"
+horizontal_alignment = 2
+
+[node name="SimResult" type="Label" parent="DetailDialog/Col" unique_id=1679477606]
+layout_mode = 2
+
+[node name="Celebration" type="CPUParticles2D" parent="." unique_id=1469923531]
+position = Vector2(392, 8)
+emitting = false
+amount = 120
+lifetime = 1.6
+one_shot = true
+explosiveness = 0.9
+spread = 180.0
+gravity = Vector2(0, 500)
+initial_velocity_min = 300.0
+initial_velocity_max = 700.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color = Color(0.9098039, 0.7019608, 0.23921569, 1)
+hue_variation_min = -0.9
+hue_variation_max = 0.9
+hue_variation_curve = SubResource("Curve_gyfhh")

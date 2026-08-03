@@ -1,0 +1,137 @@
+[gd_scene format=3 uid="uid://h5pt32smtgi7"]
+
+[ext_resource type="Script" uid="uid://dhj60kmsu0yte" path="res://scripts/ui/screens/categories.gd" id="1_go8qv"]
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/plus.svg" id="2_tmkqa"]
+[ext_resource type="PackedScene" uid="uid://41qpkq4lvkru" path="res://scenes/ui/components/month_picker.tscn" id="3_dl0cm"]
+[ext_resource type="Texture2D" uid="uid://dj7ku2asjah60" path="res://assets/icons/transactions.svg" id="4_jj16p"]
+
+[node name="Categories" type="VBoxContainer" unique_id=987409631]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 12
+script = ExtResource("1_go8qv")
+
+[node name="Toolbar" type="HBoxContainer" parent="." unique_id=1617962481]
+layout_mode = 2
+
+[node name="HSpacer" type="Control" parent="Toolbar" unique_id=485837777]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddCatButton" type="Button" parent="Toolbar" unique_id=2037781922]
+layout_mode = 2
+text = "Category"
+icon = ExtResource("2_tmkqa")
+
+[node name="CatList" type="VBoxContainer" parent="." unique_id=1806414112]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Sep" type="HSeparator" parent="." unique_id=1681943632]
+layout_mode = 2
+
+[node name="LimitsHeader" type="HBoxContainer" parent="." unique_id=1634483007]
+layout_mode = 2
+
+[node name="LimitsTitle" type="Label" parent="LimitsHeader" unique_id=1083040721]
+layout_mode = 2
+text = "Monthly Limits"
+
+[node name="LimitMonth" parent="LimitsHeader" unique_id=561295435 instance=ExtResource("3_dl0cm")]
+layout_mode = 2
+
+[node name="HSpacer" type="Control" parent="LimitsHeader" unique_id=45173768]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TransferButton" type="Button" parent="LimitsHeader" unique_id=1515305074]
+layout_mode = 2
+text = "Transfer between limits"
+icon = ExtResource("4_jj16p")
+
+[node name="LimitsList" type="VBoxContainer" parent="." unique_id=1354436640]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CatDialog" type="ConfirmationDialog" parent="." unique_id=246716266]
+oversampling_override = 1.0
+title = "Category"
+position = Vector2i(0, 36)
+size = Vector2i(314, 746)
+ok_button_text = "Save"
+
+[node name="Form" type="VBoxContainer" parent="CatDialog" unique_id=206880370]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 306.0
+offset_bottom = 697.0
+theme_override_constants/separation = 10
+
+[node name="NameEdit" type="LineEdit" parent="CatDialog/Form" unique_id=1678766181]
+layout_mode = 2
+placeholder_text = "Name"
+
+[node name="TypeSelect" type="OptionButton" parent="CatDialog/Form" unique_id=868634098]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Output"
+popup/item_0/id = 0
+popup/item_1/text = "Entry"
+popup/item_1/id = 1
+
+[node name="ColorPicker" type="ColorPicker" parent="CatDialog/Form" unique_id=52337289]
+layout_mode = 2
+color = Color(0.4862745, 0.4352941, 0.94117653, 1)
+edit_alpha = false
+edit_intensity = false
+color_modes_visible = false
+
+[node name="LimitDialog" type="ConfirmationDialog" parent="." unique_id=1182765840]
+oversampling_override = 1.0
+title = "Monthly Limit"
+size = Vector2i(200, 115)
+ok_button_text = "Save"
+
+[node name="Form" type="VBoxContainer" parent="LimitDialog" unique_id=1039568852]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 192.0
+offset_bottom = 66.0
+
+[node name="CapLabel" type="Label" parent="LimitDialog/Form" unique_id=1251569372]
+layout_mode = 2
+text = "Monthly Roof (R$)"
+
+[node name="CapEdit" type="LineEdit" parent="LimitDialog/Form" unique_id=1823403741]
+layout_mode = 2
+placeholder_text = "0,00"
+
+[node name="TransferDialog" type="ConfirmationDialog" parent="." unique_id=1384781324]
+oversampling_override = 1.0
+title = "Transfer Between Limits"
+position = Vector2i(0, 36)
+size = Vector2i(250, 189)
+ok_button_text = "Transfer"
+
+[node name="Form" type="VBoxContainer" parent="TransferDialog" unique_id=1249125425]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 242.0
+offset_bottom = 140.0
+theme_override_constants/separation = 10
+
+[node name="FromSelect" type="OptionButton" parent="TransferDialog/Form" unique_id=865980305]
+layout_mode = 2
+
+[node name="ToSelect" type="OptionButton" parent="TransferDialog/Form" unique_id=344877568]
+layout_mode = 2
+
+[node name="AmountEdit" type="LineEdit" parent="TransferDialog/Form" unique_id=1292767456]
+layout_mode = 2
+placeholder_text = "0,00"
+
+[node name="NoteEdit" type="LineEdit" parent="TransferDialog/Form" unique_id=1969361459]
+layout_mode = 2
+placeholder_text = "Reason (Optional)"
