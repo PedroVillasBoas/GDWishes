@@ -15,6 +15,8 @@ var _last_deleted: Array = []  # to undo
 var _empty: EmptyState = null  # empty-state
 
 func _ready() -> void:
+	UiUtils.hide_dialogs(self)
+	
 	_setup_table()
 	$Toolbar/AddButton.pressed.connect(_open_form)
 	$FormPanel/Form/FormButtons/CancelButton.pressed.connect(func(): _form.visible = false)

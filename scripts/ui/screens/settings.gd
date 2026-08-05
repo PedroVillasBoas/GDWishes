@@ -1,6 +1,8 @@
 extends VBoxContainer
 
 func _ready() -> void:
+	UiUtils.hide_dialogs(self)
+	
 	var p := App.project
 	$Card/Grid/NameEdit.text = p.name
 	$Card/Grid/RateEdit.text = Fmt.rate(p.rate_usd_brl)

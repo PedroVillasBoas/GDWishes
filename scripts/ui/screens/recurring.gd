@@ -6,6 +6,8 @@ var _editing = null # RecurringIncome | RecurringCost | null
 var _editing_is_income := true
 
 func _ready() -> void:
+	UiUtils.hide_dialogs(self)
+	
 	$Col/IncomeHeader/AddIncomeButton.pressed.connect(_open_dialog.bind(null, true))
 	$Col/CostHeader/AddCostButton.pressed.connect(_open_dialog.bind(null, false))
 	_dialog.confirmed.connect(_save)

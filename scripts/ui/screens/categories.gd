@@ -7,6 +7,8 @@ var _editing: Category = null
 var _limit_cat: Category = null
 
 func _ready() -> void:
+	UiUtils.hide_dialogs(self)
+	
 	$Toolbar/AddCatButton.pressed.connect(_open_dialog.bind(null))
 	_dialog.confirmed.connect(_save_dialog)
 	$LimitsHeader/LimitMonth.month_changed.connect(func(_m): _refresh_limits())

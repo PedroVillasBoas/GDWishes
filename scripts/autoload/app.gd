@@ -1,19 +1,30 @@
 extends Node
-## Autoload "App" | open project, dirty flag, autosave, recent, global period
+## Autoload "App" | open project, dirty flag, autosave, recent files, global period, and application-level settings (theme | font | autosave)
 
 const RECENT_PATH := "user://recent.json"
-const AUTOSAVE_DELAY := 30.0
+const APP_SETTINGS_PATH := "user://app_settings.json"
+
+const DEFAULT_APP_SETTINGS := {
+	"theme": "dark_fintech",
+	"font": "",                  # "" = use the font baked into the theme
+	"autosave_enabled": true,
+	"autosave_interval": 30.0,   # seconds
+}
 
 var project: FinanceProject = null
 var project_path: String = ""
 var dirty: bool = false
 
-## Global period filter: mode = "month" | "quarter" | "year" | "range" | "all"
+## Application-level settings (NOT part of the .gdwish file | they follow the app, not the project) | Persisted in user://app_settings.json
+var app_settings: Dictionary = DEFAULT_APP_SETTINGS.duplicate()
+
+## Global filter period: mode = "month" | "quarter" | "year" | "range" | "all"
 var period := {"mode": "month", "from": "", "to": ""}
 
 var _autosave_timer: Timer
 
 func _ready() -> void:
+	_load_app_settings()
 	_autosave_timer = Timer.new()
 	_autosave_timer.one_shot = true
 	_autosave_timer.timeout.connect(save_project)
@@ -25,20 +36,33 @@ func _ready() -> void:
 func has_project() -> bool:
 	return project != null
 
-# --- Project life cycle
+# --- Project Lifecycle
 
-func new_project(pname: String, start_month: String) -> void:
-	project = FinanceProject.new()
-	project.name = pname
-	project.created_at = Time.get_datetime_string_from_system()
-	project.start_month = start_month
-	_add_default_categories()
-	project_path = ""   # No save file yet | 1st save prompts for location
-	dirty = true
+## Creates a project AND writes it to disk immediately. `path` comes from the
+## Save dialog shown right after the New Project form is confirmed.
+## Returns "" on success, or an error message.
+func new_project(pname: String, start_month: String, path: String) -> String:
+	if not path.ends_with(".gdwish"):
+		path += ".gdwish"
+	var fresh := FinanceProject.new()
+	fresh.name = pname
+	fresh.created_at = Time.get_datetime_string_from_system()
+	fresh.start_month = start_month
+	_add_default_categories(fresh)
+	
+	# Write BEFORE swapping state | If the disk write fails (read-only folder, bad path), the app keeps whatever was open instead of losing it
+	var err := ProjectIO.save(fresh, path)
+	if err != "":
+		return err
+	project = fresh
+	project_path = path
+	dirty = false
+	_push_recent(path)
 	period.mode = "month"
 	period.from = start_month
 	period.to = start_month
 	EventBus.project_opened.emit()
+	return ""
 
 func open_project(path: String) -> String:
 	var result := ProjectIO.load_file(path)
@@ -57,7 +81,7 @@ func open_project(path: String) -> String:
 
 func save_project() -> void:
 	if project == null or project_path == "":
-		return  # No path yet | the UI calls save_project_as()
+		return
 	var err := ProjectIO.save(project, project_path)
 	if err != "":
 		EventBus.toast(err, "error")
@@ -78,14 +102,50 @@ func close_project() -> void:
 	dirty = false
 	EventBus.project_closed.emit()
 
-## Call after ANY data change | Mark as dirty + schedule autosave + notify UI
+## Call after ANY data change | Marks dirty, schedules autosave, notifies the UI
 func touch(what: String) -> void:
 	dirty = true
-	if project_path != "":
-		_autosave_timer.start(AUTOSAVE_DELAY)
+	_schedule_autosave()
 	EventBus.notify(what)
 
-# --- Global period
+func _schedule_autosave() -> void:
+	if project_path == "" or not app_settings.autosave_enabled:
+		return
+	_autosave_timer.start(float(app_settings.autosave_interval))
+
+# --- Application Settings
+
+func set_app_setting(key: String, value) -> void:
+	app_settings[key] = value
+	_save_app_settings()
+	# An interval change must affect the timer already counting down, otherwise
+	# the new value only takes effect after the next unrelated edit.
+	if key in ["autosave_interval", "autosave_enabled"]:
+		if not app_settings.autosave_enabled:
+			_autosave_timer.stop()
+		elif dirty:
+			_schedule_autosave()
+
+func _load_app_settings() -> void:
+	app_settings = DEFAULT_APP_SETTINGS.duplicate()
+	if not FileAccess.file_exists(APP_SETTINGS_PATH):
+		return
+	var f := FileAccess.open(APP_SETTINGS_PATH, FileAccess.READ)
+	var data = JSON.parse_string(f.get_as_text())
+	f.close()
+	if data is Dictionary:
+		for key in DEFAULT_APP_SETTINGS:   # ignore unknown/removed keys
+			if data.has(key):
+				app_settings[key] = data[key]
+
+func _save_app_settings() -> void:
+	var f := FileAccess.open(APP_SETTINGS_PATH, FileAccess.WRITE)
+	if f == null:
+		return
+	f.store_string(JSON.stringify(app_settings, "\t"))
+	f.close()
+
+# --- Global Period
 
 func set_period(mode: String, from_key: String, to_key: String) -> void:
 	period.mode = mode
@@ -93,7 +153,7 @@ func set_period(mode: String, from_key: String, to_key: String) -> void:
 	period.to = to_key
 	EventBus.period_changed.emit()
 
-## Meses do período atual (para "all": do start_month até o mês atual/último lançamento).
+## Months in the current period ("all": from start_month to the latest month used)
 func period_months() -> Array[String]:
 	if period.mode == "all":
 		var first: String = project.start_month if project else Fmt.current_month()
@@ -104,7 +164,7 @@ func period_months() -> Array[String]:
 		return Fmt.months_between(first, last)
 	return Fmt.months_between(period.from, period.to)
 
-# --- Recents
+# --- Recent Files
 
 func recent_files() -> Array:
 	if not FileAccess.file_exists(RECENT_PATH):
@@ -112,7 +172,15 @@ func recent_files() -> Array:
 	var f := FileAccess.open(RECENT_PATH, FileAccess.READ)
 	var data = JSON.parse_string(f.get_as_text())
 	f.close()
-	return data if data is Array else []
+	if not (data is Array):
+		return []
+	
+	# Drop entries whose file was moved or deleted outside the app
+	var alive := []
+	for path in data:
+		if path is String and FileAccess.file_exists(path):
+			alive.append(path)
+	return alive
 
 func _push_recent(path: String) -> void:
 	var list := recent_files()
@@ -124,9 +192,9 @@ func _push_recent(path: String) -> void:
 	f.store_string(JSON.stringify(list))
 	f.close()
 
-# --- New design pattern categories
+# --- Default categories for a new project
 
-func _add_default_categories() -> void:
+func _add_default_categories(target: FinanceProject) -> void:
 	var defaults := [
 		["Salário", "income", "#3FB950"], ["Freelance", "income", "#2EA8E8"],
 		["Saldo Inicial", "income", "#8B949E"],
@@ -140,4 +208,4 @@ func _add_default_categories() -> void:
 		c.name = row[0]
 		c.type = row[1]
 		c.color = row[2]
-		project.categories.append(c)
+		target.categories.append(c)

@@ -19,6 +19,8 @@ var _nav_buttons := {}
 var _current: Node = null
 
 func _ready() -> void:
+	UiUtils.hide_dialogs(self)
+	
 	$Layout/Sidebar/SideCol/ProjectName.text = App.project.name
 	_nav_buttons = {
 		"dashboard": $Layout/Sidebar/SideCol/NavDashboard,

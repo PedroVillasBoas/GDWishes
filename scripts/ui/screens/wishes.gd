@@ -11,6 +11,8 @@ var _progress_before := {}      # wish_id -> float (to detect 100% overlap)
 var _empty: EmptyState = null   # empty-state
 
 func _ready() -> void:
+	UiUtils.hide_dialogs(self)
+	
 	$Toolbar/AddWishButton.pressed.connect(_open_wish_dialog.bind(null))
 	$Toolbar/ShowArchived.toggled.connect(func(_v): _refresh())
 	_wish_dialog.confirmed.connect(_save_wish)
