@@ -20,6 +20,8 @@ config/icon="res://icon.svg"
 
 Fmt="*uid://c43v22bg5qqs0"
 EventBus="*uid://dqswn3tw5ogc6"
+Icons="*uid://cjve1jphvfwte"
+Themes="*uid://di1dr67jl0oxg"
 App="*uid://ci1xru5tenqtc"
 
 [display]

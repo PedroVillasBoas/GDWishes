@@ -1,13 +1,19 @@
 extends Control
-## Project shell: navigation sidebar + header + screen host.
+## Project shell | navigation sidebar + header + screen host
 
 const SCREENS := {
-	"dashboard":    {"title": "Dashboard", "scene": "res://scenes/ui/screens/dashboard.tscn"},
+	"dashboard": {"title": "Dashboard", "scene": "res://scenes/ui/screens/dashboard.tscn"},
 	"transactions": {"title": "Lançamentos", "scene": "res://scenes/ui/screens/transactions.tscn"},
-	"wishes":       {"title": "Wishes", "scene": "res://scenes/ui/screens/wishes.tscn"},
-	"categories":   {"title": "Categorias & Limites", "scene": "res://scenes/ui/screens/categories.tscn"},
-	"recurring":    {"title": "Recorrentes", "scene": "res://scenes/ui/screens/recurring.tscn"},
-	"settings":     {"title": "Configurações", "scene": "res://scenes/ui/screens/settings.tscn"},
+	"wishes": {"title": "Wishes", "scene": "res://scenes/ui/screens/wishes.tscn"},
+	"categories": {"title": "Categorias & Limites", "scene": "res://scenes/ui/screens/categories.tscn"},
+	"recurring": {"title": "Recorrentes", "scene": "res://scenes/ui/screens/recurring.tscn"},
+	"settings": {"title": "Configurações", "scene": "res://scenes/ui/screens/settings.tscn"},
+}
+
+## Screen key -> IconSet slot name
+const NAV_ICONS := {
+	"dashboard": "dashboard", "transactions": "transactions", "wishes": "wishes",
+	"categories": "categories", "recurring": "recurring", "settings": "settings",
 }
 
 @onready var _host: MarginContainer = $Layout/Content/ScreenHost
@@ -20,7 +26,6 @@ var _current: Node = null
 
 func _ready() -> void:
 	UiUtils.hide_dialogs(self)
-	
 	$Layout/Sidebar/SideCol/ProjectName.text = App.project.name
 	_nav_buttons = {
 		"dashboard": $Layout/Sidebar/SideCol/NavDashboard,
@@ -32,10 +37,15 @@ func _ready() -> void:
 	}
 	for key in _nav_buttons:
 		_nav_buttons[key].pressed.connect(show_screen.bind(key))
+		Icons.decorate(_nav_buttons[key], NAV_ICONS[key], SCREENS[key].title)
+		_nav_buttons[key].alignment = HORIZONTAL_ALIGNMENT_LEFT
+	Icons.decorate($Layout/Sidebar/SideCol/SaveButton, "save", "Salvar   Ctrl+S")
+	Icons.decorate($Layout/Sidebar/SideCol/CloseButton, "back", "Fechar projeto")
 	$Layout/Sidebar/SideCol/SaveButton.pressed.connect(_save)
 	$Layout/Sidebar/SideCol/CloseButton.pressed.connect(_close)
 	_save_dialog.file_selected.connect(App.save_project_as)
-	# Deferred: telas pedem navegação de dentro de botões que serão destruídos na troca.
+	
+	# Deferred | Screens request navigation from inside buttons that the switch destroys
 	EventBus.navigate_requested.connect(show_screen, CONNECT_DEFERRED)
 	EventBus.data_changed.connect(func(_w): _update_save_state())
 	show_screen("dashboard")
@@ -72,8 +82,14 @@ func _close() -> void:
 	App.close_project()
 
 func _update_save_state() -> void:
-	_save_state.text = "● alterações não salvas" if App.dirty else "salvo"
-	_save_state.modulate = ThemeBuilder.WARN if App.dirty else ThemeBuilder.TEXT_DIM
+	if App.dirty:
+		# Warn explicitly when autosave cannot rescue unsaved work
+		var suffix := "" if App.app_settings.autosave_enabled else "  (autosave off)"
+		_save_state.text = "● alterações não salvas" + suffix
+		_save_state.modulate = Themes.warn
+	else:
+		_save_state.text = "salvo"
+		_save_state.modulate = Themes.text_dim
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:

@@ -1,4 +1,5 @@
 extends Control
+## Main menu | Create a project (name -> month -> save location), open one, or pick from recents
 
 @onready var _recent_list: VBoxContainer = $Center/Column/RecentList
 @onready var _open_dialog: FileDialog = $OpenDialog
@@ -30,10 +31,9 @@ func _ready() -> void:
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func _apply_icons() -> void:
-	
-	# Icons live in code, not in the .tscn, so a theme/icon swap is a one-line change
-	Icons.decorate($Center/Column/NewButton, "wish", "Novo Projeto")
-	Icons.decorate($Center/Column/OpenButton, "folder", "Abrir…")
+	# Icons live in code, not in the .tscn, so swapping the icon set is a one-line change
+	Icons.decorate($Center/Column/NewButton, "wishes", "Novo Projeto")
+	Icons.decorate($Center/Column/OpenButton, "open", "Abrir…")
 
 func _fill_recents() -> void:
 	for child in _recent_list.get_children():
@@ -49,7 +49,7 @@ func _fill_recents() -> void:
 		b.pressed.connect(_on_file_selected.bind(path))
 		_recent_list.add_child(b)
 
-# --- New Project | form -> save location -> create
+# --- New project | Form -> Save Location -> Create
 
 func _on_new_pressed() -> void:
 	_name_edit.text = ""
@@ -82,4 +82,4 @@ func _on_file_selected(path: String) -> void:
 	var err := App.open_project(path)
 	if err != "":
 		EventBus.toast(err, "error")
-		_fill_recents()   # A dead entry was just pruned | refresh the list
+		_fill_recents()   # A dead entry was just pruned | Refresh the list

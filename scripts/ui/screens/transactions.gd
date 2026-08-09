@@ -1,4 +1,5 @@
 extends VBoxContainer
+## Transactions screen | sortable table, filters, side form, installments and undo
 
 const COLUMNS := ["Data", "Descrição", "Categoria", "Tipo", "Valor Orig", "Método", "Valor", "Obs"]
 
@@ -10,25 +11,29 @@ const COLUMNS := ["Data", "Descrição", "Categoria", "Tipo", "Valor Orig", "Mé
 @onready var _amount = $FormPanel/Form/Grid/Amount
 @onready var _cat_select: OptionButton = $FormPanel/Form/Grid/CategorySelect
 
-var _editing_id: String = ""   # "" = creating new
-var _last_deleted: Array = []  # to undo
-var _empty: EmptyState = null  # empty-state
+var _editing_id: String = ""   # "" = creating a new one
+var _last_deleted: Array = []  # For undo
+var _empty: EmptyState = null
 
 func _ready() -> void:
 	UiUtils.hide_dialogs(self)
-	
 	_setup_table()
+	Icons.decorate($Toolbar/AddButton, "add", "Lançamento")
+	_search.right_icon = Icons.get_icon("search")
+	Icons.decorate($FormPanel/Form/FormButtons/SaveTxButton, "save", "Salvar")
+	Icons.decorate($FormPanel/Form/FormButtons/CancelButton, "close", "Cancelar")
 	$Toolbar/AddButton.pressed.connect(_open_form)
 	$FormPanel/Form/FormButtons/CancelButton.pressed.connect(func(): _form.visible = false)
 	$FormPanel/Form/FormButtons/SaveTxButton.pressed.connect(_save_form)
 	_search.text_changed.connect(func(_t): _refresh())
 	_type_filter.item_selected.connect(func(_i): _refresh())
 	_cat_filter.item_selected.connect(func(_i): _refresh())
-	_table.item_activated.connect(_on_row_activated)      # double-click = edit
+	_table.item_activated.connect(_on_row_activated)      # Double click = edit
 	EventBus.period_changed.connect(_refresh)
 	EventBus.data_changed.connect(func(w):
 		if w == "transactions" or w == "categories":
 			_refresh())
+	Themes.theme_changed.connect(_refresh)
 	_fill_category_options()
 	_refresh()
 
@@ -36,7 +41,7 @@ func _setup_table() -> void:
 	_table.columns = COLUMNS.size()
 	for i in COLUMNS.size():
 		_table.set_column_title(i, COLUMNS[i])
-		_table.set_column_expand(i, i == 1 or i == 7)     # Description and Notes (expand)
+		_table.set_column_expand(i, i == 1 or i == 7)
 	_table.set_column_custom_minimum_width(0, 90)
 	_table.set_column_custom_minimum_width(6, 110)
 
@@ -75,20 +80,20 @@ func _refresh() -> void:
 		row.set_text(1, t.description)
 		row.set_text(2, cat.name if cat else "—")
 		row.set_text(3, "Entrada" if t.type == "income" else "Saída")
-		row.set_custom_color(3, ThemeBuilder.INCOME if t.type == "income" else ThemeBuilder.EXPENSE)
+		row.set_custom_color(3, Themes.income if t.type == "income" else Themes.expense)
 		row.set_text(4, ("US$ " if t.currency == "USD" else "R$ ") + Fmt.money(t.orig_amount_cents, ""))
 		row.set_text(5, {"credit": "Crédito", "debit": "Débito", "pix": "Pix", "cash": "Dinheiro"}.get(t.method, t.method))
 		row.set_text(6, Fmt.money(t.amount_cents))
-		row.set_custom_color(6, ThemeBuilder.INCOME if t.type == "income" else ThemeBuilder.EXPENSE)
+		row.set_custom_color(6, Themes.income if t.type == "income" else Themes.expense)
 		row.set_text(7, t.notes)
 		shown += 1
 	_update_empty(shown)
 
-## No rows -> hides the table and shows the empty state instead
+## No rows -> hide the table and show the empty state in its place
 func _update_empty(shown: int) -> void:
 	if shown == 0 and not is_instance_valid(_empty):
-		_empty = EmptyState.make("💸", "Nenhum lançamento neste período.",
-			"＋ Primeiro lançamento", _open_form)
+		_empty = EmptyState.make("transactions", "Nenhum lançamento neste período.",
+			"Primeiro lançamento", _open_form)
 		add_child(_empty)
 		move_child(_empty, _table.get_index() + 1)
 	elif shown > 0 and is_instance_valid(_empty):
@@ -111,7 +116,7 @@ func _open_form(tx: Transaction = null) -> void:
 				_cat_select.selected = i
 		g.get_node("MethodSelect").selected = ["credit", "debit", "pix", "cash"].find(tx.method)
 		g.get_node("InstallmentsSpin").value = 1
-		g.get_node("InstallmentsSpin").editable = false   # Do not re-segment during editing
+		g.get_node("InstallmentsSpin").editable = false   # No re-splitting on edit
 		g.get_node("DateEdit").text = tx.date
 		g.get_node("NotesEdit").text = tx.notes
 	else:
@@ -161,7 +166,7 @@ func _save_form() -> void:
 	App.touch("transactions")
 	_notify_limit(data)
 
-## Toast de abatimento do limite (usa o LimitEngine da Parte 3).
+## Toast showing how much of the category limit is left after this expense
 func _notify_limit(data: Dictionary) -> void:
 	if data.type != "expense":
 		return

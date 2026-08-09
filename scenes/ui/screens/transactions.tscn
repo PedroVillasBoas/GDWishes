@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://dsyehs3hee8wy"]
 
-[ext_resource type="Texture2D" uid="uid://bthdge3inx42o" path="res://assets/icons/search.svg" id="1_aqsrs"]
+[ext_resource type="Texture2D" uid="uid://bthdge3inx42o" path="res://assets/icons/actions/search.svg" id="1_aqsrs"]
 [ext_resource type="Script" uid="uid://dlyfi3x76y22u" path="res://scripts/ui/screens/transactions.gd" id="1_j6yx8"]
-[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/plus.svg" id="2_o4pnw"]
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/actions/plus.svg" id="2_o4pnw"]
 [ext_resource type="PackedScene" uid="uid://bqiwkci4ws2ub" path="res://scenes/ui/components/currency_input.tscn" id="3_g4uqo"]
-[ext_resource type="Texture2D" uid="uid://dk3slvhmtarj3" path="res://assets/icons/x.svg" id="5_bu8pt"]
-[ext_resource type="Texture2D" uid="uid://gliusom3320o" path="res://assets/icons/save.svg" id="6_rpqnb"]
+[ext_resource type="Texture2D" uid="uid://dk3slvhmtarj3" path="res://assets/icons/actions/x.svg" id="5_bu8pt"]
+[ext_resource type="Texture2D" uid="uid://gliusom3320o" path="res://assets/icons/actions/save.svg" id="6_rpqnb"]
 
 [node name="Transactions" type="VBoxContainer" unique_id=143958874]
 offset_right = 40.0

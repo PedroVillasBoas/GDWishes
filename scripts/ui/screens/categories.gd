@@ -1,4 +1,5 @@
 extends VBoxContainer
+## Categories CRUD plus the monthly limits panel (cap, rollover, transfers)
 
 @onready var _list: VBoxContainer = $CatList
 @onready var _dialog: ConfirmationDialog = $CatDialog
@@ -8,7 +9,8 @@ var _limit_cat: Category = null
 
 func _ready() -> void:
 	UiUtils.hide_dialogs(self)
-	
+	Icons.decorate($Toolbar/AddCatButton, "add", "Categoria")
+	Icons.decorate($LimitsHeader/TransferButton, "transfer", "Transferir entre limites")
 	$Toolbar/AddCatButton.pressed.connect(_open_dialog.bind(null))
 	_dialog.confirmed.connect(_save_dialog)
 	$LimitsHeader/LimitMonth.month_changed.connect(func(_m): _refresh_limits())
@@ -16,6 +18,7 @@ func _ready() -> void:
 	$LimitDialog.confirmed.connect(_save_limit)
 	$TransferDialog.confirmed.connect(_do_transfer)
 	EventBus.data_changed.connect(_on_data_changed)
+	Themes.theme_changed.connect(func(): _refresh(); _refresh_limits())
 	_refresh()
 	_refresh_limits()
 
@@ -30,10 +33,11 @@ func _on_data_changed(what: String) -> void:
 func _refresh() -> void:
 	for c in _list.get_children():
 		c.queue_free()
-	# empty-state: The list is cleared on every refresh, so just add it here
+	
+	# The list is cleared on every refresh, so the empty state can just be added here
 	if App.project.categories.is_empty():
-		_list.add_child(EmptyState.make("🏷", "Sem categorias — crie a primeira.",
-			"＋ Categoria", _open_dialog.bind(null), true))
+		_list.add_child(EmptyState.make("categories", "Sem categorias — crie a primeira.",
+			"Categoria", _open_dialog.bind(null), true))
 	for cat in App.project.categories:
 		_list.add_child(_make_row(cat))
 
@@ -53,21 +57,22 @@ func _make_row(cat: Category) -> PanelContainer:
 	row.add_child(name_l)
 	var type_l := Label.new()
 	type_l.text = "Entrada" if cat.type == "income" else "Saída"
-	type_l.modulate = ThemeBuilder.INCOME if cat.type == "income" else ThemeBuilder.EXPENSE
+	type_l.modulate = Themes.income if cat.type == "income" else Themes.expense
 	row.add_child(type_l)
 	if cat.type == "expense":
 		var lim_b := Button.new()
 		var lim := App.project.limit_for_category(cat.id)
-		lim_b.text = ("Limite: " + Fmt.money(lim.monthly_cap_cents)) if lim else "＋ Limite"
+		Icons.decorate(lim_b, "target",
+			("Limite: " + Fmt.money(lim.monthly_cap_cents)) if lim else "Limite")
 		lim_b.pressed.connect(_open_limit_dialog.bind(cat))
 		row.add_child(lim_b)
 	var edit_b := Button.new()
-	edit_b.text = "Editar"
+	Icons.decorate(edit_b, "edit", "Editar")
 	edit_b.pressed.connect(_open_dialog.bind(cat))
 	row.add_child(edit_b)
 	var del_b := Button.new()
-	del_b.text = "Excluir"
 	del_b.theme_type_variation = "DangerButton"
+	Icons.decorate(del_b, "delete", "Excluir")
 	del_b.pressed.connect(_delete.bind(cat))
 	row.add_child(del_b)
 	return panel
@@ -76,7 +81,7 @@ func _open_dialog(cat: Category) -> void:
 	_editing = cat
 	$CatDialog/Form/NameEdit.text = cat.name if cat else ""
 	$CatDialog/Form/TypeSelect.selected = (1 if cat.type == "income" else 0) if cat else 0
-	$CatDialog/Form/ColorPick.color = Color(cat.color) if cat else ThemeBuilder.ACCENT
+	$CatDialog/Form/ColorPick.color = Color(cat.color) if cat else Themes.accent
 	_dialog.popup_centered(Vector2i(380, 240))
 
 func _save_dialog() -> void:
@@ -118,7 +123,7 @@ func _save_limit() -> void:
 	var lim := App.project.limit_for_category(_limit_cat.id)
 	if cap <= 0:
 		if lim:
-			App.project.limits.erase(lim)   # Zero/empty ceiling removes the limit
+			App.project.limits.erase(lim) # Empty/Zero cap removes the limit
 	elif lim:
 		lim.monthly_cap_cents = cap
 	else:
@@ -129,7 +134,7 @@ func _save_limit() -> void:
 		lim.active_from = App.project.start_month
 		App.project.limits.append(lim)
 	App.touch("limits")
-	_refresh() # Updates the button text in the category rows
+	_refresh() # Refresh the limit button label on the category rows
 	_refresh_limits()
 
 func _refresh_limits() -> void:
@@ -137,11 +142,9 @@ func _refresh_limits() -> void:
 	for c in list.get_children():
 		c.queue_free()
 	var month: String = $LimitsHeader/LimitMonth.month
-	
-	# empty-state
 	if App.project.limits.is_empty():
-		list.add_child(EmptyState.make("🎯",
-			"Nenhum limite ainda — use o botão \"＋ Limite\" em uma categoria de Saída.",
+		list.add_child(EmptyState.make("target",
+			"Nenhum limite ainda — use o botão \"Limite\" em uma categoria de Saída.",
 			"", Callable(), true))
 		return
 	for lim in App.project.limits:
@@ -151,7 +154,7 @@ func _refresh_limits() -> void:
 		var s := LimitEngine.state_for(App.project, lim, month)
 		list.add_child(_make_limit_row(cat, s))
 
-## Row: Name | Cap | +Rollover | Spent | Available | colored progress bar
+## Row | name | cap | +rollover | spent | available | colored progress bar
 func _make_limit_row(cat: Category, s: Dictionary) -> PanelContainer:
 	var panel := PanelContainer.new()
 	var col := VBoxContainer.new()
@@ -171,7 +174,7 @@ func _make_limit_row(cat: Category, s: Dictionary) -> PanelContainer:
 		l.theme_type_variation = "Dim"
 		if pair[0] == "Disponível":
 			l.theme_type_variation = ""
-			l.modulate = ThemeBuilder.INCOME if pair[1] >= 0 else ThemeBuilder.EXPENSE
+			l.modulate = Themes.income if pair[1] >= 0 else Themes.expense
 		row.add_child(l)
 	var bar := ProgressBar.new()
 	bar.max_value = maxf(float(s.available), 1.0)
@@ -179,9 +182,11 @@ func _make_limit_row(cat: Category, s: Dictionary) -> PanelContainer:
 	bar.show_percentage = false
 	bar.custom_minimum_size = Vector2(0, 8)
 	var ratio := float(s.spent) / maxf(float(s.available), 1.0)
+	
+	# Overrides the theme's neutral fill so each row signals its own state
 	var fill := StyleBoxFlat.new()
-	fill.bg_color = ThemeBuilder.INCOME if ratio < 0.75 \
-		else (ThemeBuilder.WARN if ratio <= 1.0 else ThemeBuilder.EXPENSE)
+	fill.bg_color = Themes.income if ratio < 0.75 \
+		else (Themes.warn if ratio <= 1.0 else Themes.expense)
 	fill.set_corner_radius_all(4)
 	bar.add_theme_stylebox_override("fill", fill)
 	col.add_child(bar)

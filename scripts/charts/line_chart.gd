@@ -1,6 +1,6 @@
 class_name LineChart
 extends ChartBase
-## points: [{"label": "Abr 26", "value": cents}]
+## Points | [{"label": "Abr 26", "value": cents}]
 
 var points: Array[Dictionary] = []
 
@@ -25,24 +25,22 @@ func _draw() -> void:
 		var x := r.position.x + r.size.x * float(i) / (points.size() - 1)
 		var y := r.end.y - r.size.y * (float(points[i].value) - min_v) / span
 		pos_list.append(Vector2(x, y))
-	
-	# Area filled with a fake gradient (transparency)
 	if pos_list.size() >= 2:
 		var poly := pos_list.duplicate()
 		poly.append(Vector2(pos_list[-1].x, r.end.y))
 		poly.append(Vector2(pos_list[0].x, r.end.y))
-		draw_colored_polygon(poly, Color(ThemeBuilder.ACCENT, 0.12))
-		draw_polyline(pos_list, ThemeBuilder.ACCENT, 2.5, true)
+		draw_colored_polygon(poly, Color(Themes.accent, 0.12))
+		draw_polyline(pos_list, Themes.accent, 2.5, true)
 	for pos in pos_list:
-		draw_circle(pos, 3.5, ThemeBuilder.ACCENT)
-	
-	# X-axis labels (max. 8 to avoid clutter)
+		draw_circle(pos, 3.5, Themes.accent)
+		
+	# X axis labels, capped at 8 so they never collide
 	var font := get_theme_default_font()
 	var step := maxi(1, int(points.size() / 8.0))
 	for i in range(0, points.size(), step):
 		var x := r.position.x + r.size.x * float(i) / (points.size() - 1)
 		draw_string(font, Vector2(x - 20, size.y - 8), points[i].label,
-			HORIZONTAL_ALIGNMENT_CENTER, 48, 11, ThemeBuilder.TEXT_DIM)
+			HORIZONTAL_ALIGNMENT_CENTER, 48, 11, Themes.text_dim)
 	draw_chart_tooltip()
 
 func _gui_input(event: InputEvent) -> void:

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cva36r05rotsj"]
 
-[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/plus.svg" id="1_7yk3f"]
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/actions/plus.svg" id="1_7yk3f"]
 [ext_resource type="Script" uid="uid://b2bdfk6gib7eb" path="res://scripts/ui/screens/wishes.gd" id="1_gyfhh"]
 
 [sub_resource type="Curve" id="Curve_gyfhh"]

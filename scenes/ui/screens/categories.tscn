@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://h5pt32smtgi7"]
 
 [ext_resource type="Script" uid="uid://dhj60kmsu0yte" path="res://scripts/ui/screens/categories.gd" id="1_go8qv"]
-[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/plus.svg" id="2_tmkqa"]
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/actions/plus.svg" id="2_tmkqa"]
 [ext_resource type="PackedScene" uid="uid://41qpkq4lvkru" path="res://scenes/ui/components/month_picker.tscn" id="3_dl0cm"]
-[ext_resource type="Texture2D" uid="uid://dj7ku2asjah60" path="res://assets/icons/transactions.svg" id="4_jj16p"]
+[ext_resource type="Texture2D" uid="uid://dj7ku2asjah60" path="res://assets/icons/navigation/transactions.svg" id="4_jj16p"]
 
 [node name="Categories" type="VBoxContainer" unique_id=987409631]
 offset_right = 40.0

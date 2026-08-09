@@ -1,6 +1,7 @@
 extends ScrollContainer
+## Dashboard | KPI cards, three charts, wish/limit summaries and the cash flow table
 
-# Unique names (%) 
+# Unique names (%)
 @onready var _card_balance: PanelContainer = %CardBalance
 @onready var _card_free: PanelContainer = %CardFree
 @onready var _card_income: PanelContainer = %CardIncome
@@ -15,8 +16,10 @@ extends ScrollContainer
 var _welcome: EmptyState = null
 
 func _ready() -> void:
+	UiUtils.hide_dialogs(self)
 	EventBus.period_changed.connect(_refresh)
 	EventBus.data_changed.connect(func(_w): _refresh())
+	Themes.theme_changed.connect(_refresh)
 	_donut.slice_clicked.connect(_on_slice_clicked)
 	_refresh()
 
@@ -30,26 +33,26 @@ func _refresh() -> void:
 	var free := balance - WishEngine.total_reserved(p)
 
 	_card_balance.setup("SALDO TOTAL", balance)
-	_card_free.setup("SALDO LIVRE", free, ThemeBuilder.ACCENT)
-	_card_income.setup("ENTRADAS", t.income, ThemeBuilder.INCOME)
-	_card_expense.setup("SAÍDAS", t.expense, ThemeBuilder.EXPENSE)
+	_card_free.setup("SALDO LIVRE", free, Themes.accent)
+	_card_income.setup("ENTRADAS", t.income, Themes.income)
+	_card_expense.setup("SAÍDAS", t.expense, Themes.expense)
 
-	# Line Chart | month-by-month balance
+	# Line | balance month by month
 	var line_points: Array[Dictionary] = []
 	for m in months:
 		line_points.append({"label": Fmt.month_label(m, true), "value": Ledger.balance_until(p, m)})
 	_line.set_data(line_points)
 
-	# Donut Chart | expenses by category
+	# Donut | expenses per category
 	var by_cat := Ledger.expenses_by_category(p, months[0], months[-1])
 	var slices: Array[Dictionary] = []
 	for cid in by_cat:
 		var cat := p.category_by_id(cid)
 		slices.append({"label": cat.name if cat else "?", "value": by_cat[cid],
-			"color": Color(cat.color) if cat else ThemeBuilder.TEXT_DIM})
+			"color": Color(cat.color) if cat else Themes.text_dim})
 	_donut.set_data(slices)
 
-	# Bar Chart | inflows vs. outflows per month
+	# Bars | income vs expense per month
 	var bar_points: Array[Dictionary] = []
 	for m in months:
 		var mt := Ledger.totals(Ledger.transactions_in_month(p, m))
@@ -57,7 +60,7 @@ func _refresh() -> void:
 			"income": mt.income, "expense": mt.expense})
 	_bars.set_data(bar_points)
 
-	# New project = fresh start: hides empty charts
+	# A brand new project has nothing to plot | Hide the charts rather than showing three empty frames on first launch
 	var has_data := not p.transactions.is_empty()
 	_line.get_parent().get_parent().visible = has_data       # LinePanel
 	_donut.get_parent().get_parent().visible = has_data      # DonutPanel
@@ -68,15 +71,15 @@ func _refresh() -> void:
 	_refresh_limits(months[-1])
 	_refresh_cashflow(months)
 
-## Empty state for the entire dashboard: a newly created project has NOTHING
+## Empty state for the whole dashboard | a freshly created project has NOTHING
 func _update_welcome(has_data: bool) -> void:
 	if not has_data and not is_instance_valid(_welcome):
-		_welcome = EmptyState.make("👋", "Bem-vindo ao %s!\nComece lançando sua primeira \
+		_welcome = EmptyState.make("welcome", "Bem-vindo ao %s!\nComece lançando sua primeira \
 movimentação — os gráficos aparecem sozinhos." % App.project.name,
-			"＋ Primeiro lançamento",
+			"Primeiro lançamento",
 			func(): EventBus.navigate_requested.emit("transactions"))
 		$Col.add_child(_welcome)
-		$Col.move_child(_welcome, 1)   # Below the stat cards
+		$Col.move_child(_welcome, 1) # Right below the stat cards
 	elif has_data and is_instance_valid(_welcome):
 		_welcome.queue_free()
 		_welcome = null
@@ -87,7 +90,7 @@ func _refresh_wishes() -> void:
 		c.queue_free()
 	var roots := App.project.wishes.filter(func(w): return w.parent_id == "" and w.status == "active")
 	if roots.is_empty():
-		list.add_child(EmptyState.make("✨", "Nenhum wish ainda.",
+		list.add_child(EmptyState.make("wishes", "Nenhum wish ainda.",
 			"Criar wish", func(): EventBus.navigate_requested.emit("wishes"), true))
 		return
 	roots.sort_custom(func(a, b):
@@ -101,7 +104,7 @@ func _refresh_wishes() -> void:
 		row.add_child(l)
 		var pct := Label.new()
 		pct.text = Fmt.pct(WishEngine.progress_of(App.project, w))
-		pct.modulate = ThemeBuilder.WISH
+		pct.modulate = Themes.wish
 		row.add_child(pct)
 		list.add_child(row)
 
@@ -110,7 +113,7 @@ func _refresh_limits(month: String) -> void:
 	for c in list.get_children():
 		c.queue_free()
 	if App.project.limits.is_empty():
-		list.add_child(EmptyState.make("🎯", "Nenhum limite definido.",
+		list.add_child(EmptyState.make("target", "Nenhum limite definido.",
 			"Definir limites", func(): EventBus.navigate_requested.emit("categories"), true))
 		return
 	for lim in App.project.limits:
@@ -123,7 +126,7 @@ func _refresh_limits(month: String) -> void:
 		row.add_child(l)
 		var v := Label.new()
 		v.text = Fmt.money(s.leftover)
-		v.modulate = ThemeBuilder.INCOME if s.leftover >= 0 else ThemeBuilder.EXPENSE
+		v.modulate = Themes.income if s.leftover >= 0 else Themes.expense
 		row.add_child(v)
 		list.add_child(row)
 
@@ -135,7 +138,7 @@ func _refresh_cashflow(months: Array[String]) -> void:
 		table.set_column_title(pair[0], pair[1])
 	var root := table.create_item()
 	
-	# Extends three months into the future to show the projection
+	# Extend three months into the future to expose the projection
 	var extended := months.duplicate()
 	for i in 3:
 		extended.append(Fmt.add_months(months[-1], i + 1))
@@ -144,13 +147,13 @@ func _refresh_cashflow(months: Array[String]) -> void:
 		item.set_text(0, Fmt.month_label(row_data.month, true) + (" *" if row_data.projected else ""))
 		item.set_text(1, Fmt.money(row_data.opening))
 		item.set_text(2, Fmt.money(row_data.income))
-		item.set_custom_color(2, ThemeBuilder.INCOME)
+		item.set_custom_color(2, Themes.income)
 		item.set_text(3, Fmt.money(row_data.expense))
-		item.set_custom_color(3, ThemeBuilder.EXPENSE)
+		item.set_custom_color(3, Themes.expense)
 		item.set_text(4, Fmt.money(row_data.closing))
 		if row_data.projected:
 			for col in 5:
-				item.set_custom_bg_color(col, ThemeBuilder.SURFACE_HI)
+				item.set_custom_bg_color(col, Themes.surface_hi)
 
 func _on_slice_clicked(label: String) -> void:
 	EventBus.toast("Filtro: %s — abra Lançamentos e selecione a categoria." % label)

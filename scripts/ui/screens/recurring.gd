@@ -1,4 +1,5 @@
 extends ScrollContainer
+## Recurring incomes and costs, plus this month's pending confirmations
 
 @onready var _dialog: ConfirmationDialog = $Col/EditDialog
 
@@ -7,31 +8,51 @@ var _editing_is_income := true
 
 func _ready() -> void:
 	UiUtils.hide_dialogs(self)
-	
+	Icons.decorate($Col/IncomeHeader/AddIncomeButton, "add", "Renda")
+	Icons.decorate($Col/CostHeader/AddCostButton, "add", "Custo")
+	_decorate_pending_header()
 	$Col/IncomeHeader/AddIncomeButton.pressed.connect(_open_dialog.bind(null, true))
 	$Col/CostHeader/AddCostButton.pressed.connect(_open_dialog.bind(null, false))
 	_dialog.confirmed.connect(_save)
 	EventBus.data_changed.connect(func(w):
 		if w in ["recurring", "transactions"]:
 			_refresh())
+	Themes.theme_changed.connect(_refresh)
 	_refresh()
+
+## Wraps the pending-panel title in a row with a warning icon
+## Done in code so the scene stays plain | guarded so repeated calls do not nest rows
+func _decorate_pending_header() -> void:
+	var title: Label = $Col/PendingPanel/PendingCol/PendingTitle
+	if title.get_parent() is HBoxContainer:
+		return
+	title.text = "Pendentes de confirmação neste mês"
+	var col := title.get_parent()
+	var index := title.get_index()
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	col.remove_child(title)
+	row.add_child(Icons.make_texture_rect("warning", 18, Themes.warn))
+	row.add_child(title)
+	col.add_child(row)
+	col.move_child(row, index)
 
 func _refresh() -> void:
 	for list in [$Col/IncomeList, $Col/CostList, $Col/PendingPanel/PendingCol/PendingList]:
 		for c in list.get_children():
 			c.queue_free()
 	
-	# Empty-states | the lists are cleared on every refresh, so simply add them here
+	# Lists are cleared on every refresh, so empty states can just be added here
 	if App.project.recurring_incomes.is_empty():
-		$Col/IncomeList.add_child(EmptyState.make("💰",
+		$Col/IncomeList.add_child(EmptyState.make("income",
 			"Nenhuma renda cadastrada — comece pelo seu salário.",
-			"＋ Renda", _open_dialog.bind(null, true), true))
+			"Renda", _open_dialog.bind(null, true), true))
 	for ri in App.project.recurring_incomes:
 		$Col/IncomeList.add_child(_make_row(ri, true))
 	if App.project.recurring_costs.is_empty():
-		$Col/CostList.add_child(EmptyState.make("🔁",
+		$Col/CostList.add_child(EmptyState.make("recurring",
 			"Nenhum custo fixo — cadastre aluguel, assinaturas, faculdade…",
-			"＋ Custo", _open_dialog.bind(null, false), true))
+			"Custo", _open_dialog.bind(null, false), true))
 	for rc in App.project.recurring_costs:
 		$Col/CostList.add_child(_make_row(rc, false))
 	_refresh_pending()
@@ -41,6 +62,9 @@ func _make_row(obj, is_income: bool) -> PanelContainer:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	panel.add_child(row)
+	row.add_child(Icons.make_texture_rect(
+		"income" if is_income else "expense", 18,
+		Themes.income if is_income else Themes.expense))
 	var name_l := Label.new()
 	name_l.text = obj.name
 	name_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -51,15 +75,15 @@ func _make_row(obj, is_income: bool) -> PanelContainer:
 	row.add_child(kind_l)
 	var amount_l := Label.new()
 	amount_l.text = Fmt.money(obj.amount_cents)
-	amount_l.modulate = ThemeBuilder.INCOME if is_income else ThemeBuilder.EXPENSE
+	amount_l.modulate = Themes.income if is_income else Themes.expense
 	row.add_child(amount_l)
 	var edit_b := Button.new()
-	edit_b.text = "Editar"
+	Icons.decorate(edit_b, "edit", "Editar")
 	edit_b.pressed.connect(_open_dialog.bind(obj, is_income))
 	row.add_child(edit_b)
 	var del_b := Button.new()
-	del_b.text = "Excluir"
 	del_b.theme_type_variation = "DangerButton"
+	Icons.decorate(del_b, "delete", "Excluir")
 	del_b.pressed.connect(func():
 		if is_income: App.project.recurring_incomes.erase(obj)
 		else: App.project.recurring_costs.erase(obj)
@@ -83,11 +107,13 @@ func _refresh_pending() -> void:
 			else entry.obj.amount_cents, "")
 		amount_e.custom_minimum_size = Vector2(120, 0)
 		amount_e.alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		
+		# Fixed entries have a locked value | Variable ones are edited before confirming
 		amount_e.editable = entry.obj.kind != "fixed"
 		row.add_child(amount_e)
 		var ok_b := Button.new()
-		ok_b.text = "Confirmar"
 		ok_b.theme_type_variation = "PrimaryButton"
+		Icons.decorate(ok_b, "confirm", "Confirmar")
 		ok_b.pressed.connect(func():
 			Cashflow.confirm(App.project, entry, month, Money.parse_brl(amount_e.text))
 			App.touch("transactions"))

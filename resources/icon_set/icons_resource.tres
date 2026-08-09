@@ -1,0 +1,65 @@
+[gd_resource type="Resource" script_class="IconSet" format=3 uid="uid://npy22vjp6yqv"]
+
+[ext_resource type="Script" uid="uid://4ud01x11n2ac" path="res://scripts/resources/icon_set.gd" id="1_h8veq"]
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/actions/plus.svg" id="1_vub6k"]
+[ext_resource type="Texture2D" uid="uid://b476n2ehffjn3" path="res://assets/icons/actions/return.svg" id="2_kbgex"]
+[ext_resource type="Texture2D" uid="uid://dlycmndl5lsyh" path="res://assets/icons/status/cart.svg" id="3_kbgex"]
+[ext_resource type="Texture2D" uid="uid://b7tfjxa46rbuf" path="res://assets/icons/navigation/categories.svg" id="4_kbgex"]
+[ext_resource type="Texture2D" uid="uid://de1ivjcj16foh" path="res://assets/icons/status/celebrate.svg" id="5_3yt8r"]
+[ext_resource type="Texture2D" uid="uid://c6spdivdgi7s" path="res://assets/icons/arrows/arrow-left.svg" id="6_2o7e4"]
+[ext_resource type="Texture2D" uid="uid://cpx7pox2xp4uo" path="res://assets/icons/arrows/arrow-right.svg" id="7_ggkyq"]
+[ext_resource type="Texture2D" uid="uid://dk3slvhmtarj3" path="res://assets/icons/actions/x.svg" id="8_3yt8r"]
+[ext_resource type="Texture2D" uid="uid://1hwmhh04xpij" path="res://assets/icons/actions/check.svg" id="9_2o7e4"]
+[ext_resource type="Texture2D" uid="uid://dmd2txx6jmdf3" path="res://assets/icons/navigation/dashboard.svg" id="10_3yt8r"]
+[ext_resource type="Texture2D" uid="uid://bi31yn3uxaabr" path="res://assets/icons/actions/trash.svg" id="11_ggkyq"]
+[ext_resource type="Texture2D" uid="uid://gvaciykd3qo1" path="res://assets/icons/finance/deposit.svg" id="12_kbgex"]
+[ext_resource type="Texture2D" uid="uid://d4a0fw2l0h1uc" path="res://assets/icons/actions/edit.svg" id="13_rhfs4"]
+[ext_resource type="Texture2D" uid="uid://65rhgs28dqnn" path="res://assets/icons/finance/expense.svg" id="14_3yt8r"]
+[ext_resource type="Texture2D" uid="uid://217lw13jmyj0" path="res://assets/icons/finance/income.svg" id="15_2o7e4"]
+[ext_resource type="Texture2D" uid="uid://db1lv2xe5ts0s" path="res://assets/icons/actions/open.svg" id="15_4brxq"]
+[ext_resource type="Texture2D" uid="uid://ddogcl53ds10u" path="res://assets/icons/navigation/recurring.svg" id="17_2o7e4"]
+[ext_resource type="Texture2D" uid="uid://dtwvkri5jyop5" path="res://assets/kenney_light-masks/Transparent/window_h.png" id="17_3yt8r"]
+[ext_resource type="Texture2D" uid="uid://gliusom3320o" path="res://assets/icons/actions/save.svg" id="17_wd21t"]
+[ext_resource type="Texture2D" uid="uid://bthdge3inx42o" path="res://assets/icons/actions/search.svg" id="19_10ant"]
+[ext_resource type="Texture2D" uid="uid://otta4hdogtvq" path="res://assets/icons/navigation/settings.svg" id="21_ggkyq"]
+[ext_resource type="Texture2D" uid="uid://cjf3pf4oloug4" path="res://assets/icons/finance/target.svg" id="22_ggkyq"]
+[ext_resource type="Texture2D" uid="uid://d0okb536dv4u6" path="res://assets/icons/actions/transfer.svg" id="23_g2w2n"]
+[ext_resource type="Texture2D" uid="uid://dj7ku2asjah60" path="res://assets/icons/navigation/transactions.svg" id="23_rhfs4"]
+[ext_resource type="Texture2D" uid="uid://p0bs7u12npfb" path="res://assets/icons/status/trophy.svg" id="25_rhfs4"]
+[ext_resource type="Texture2D" uid="uid://56my1uwu7oj3" path="res://assets/icons/finance/wallet.svg" id="26_rhfs4"]
+[ext_resource type="Texture2D" uid="uid://btsvjqk25iy7l" path="res://assets/icons/status/warning.svg" id="27_4brxq"]
+[ext_resource type="Texture2D" uid="uid://ccr48edm2q1jl" path="res://assets/icons/status/welcome.svg" id="28_wd21t"]
+[ext_resource type="Texture2D" uid="uid://b73fsfmm4jtgh" path="res://assets/icons/navigation/wish.svg" id="29_4brxq"]
+
+[resource]
+script = ExtResource("1_h8veq")
+dashboard = ExtResource("10_3yt8r")
+transactions = ExtResource("23_rhfs4")
+wishes = ExtResource("29_4brxq")
+categories = ExtResource("4_kbgex")
+recurring = ExtResource("17_2o7e4")
+settings = ExtResource("21_ggkyq")
+add = ExtResource("1_vub6k")
+edit = ExtResource("13_rhfs4")
+delete = ExtResource("11_ggkyq")
+save = ExtResource("17_wd21t")
+open = ExtResource("15_4brxq")
+close = ExtResource("8_3yt8r")
+back = ExtResource("2_kbgex")
+search = ExtResource("19_10ant")
+confirm = ExtResource("9_2o7e4")
+transfer = ExtResource("23_g2w2n")
+income = ExtResource("15_2o7e4")
+expense = ExtResource("14_3yt8r")
+target = ExtResource("22_ggkyq")
+deposit = ExtResource("12_kbgex")
+wallet = ExtResource("26_rhfs4")
+trophy = ExtResource("25_rhfs4")
+cart = ExtResource("3_kbgex")
+celebrate = ExtResource("5_3yt8r")
+welcome = ExtResource("28_wd21t")
+warning = ExtResource("27_4brxq")
+chevron_left = ExtResource("6_2o7e4")
+chevron_right = ExtResource("7_ggkyq")
+particle = ExtResource("17_3yt8r")
+metadata/_custom_type_script = "uid://4ud01x11n2ac"

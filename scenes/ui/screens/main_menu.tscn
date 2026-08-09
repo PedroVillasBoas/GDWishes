@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://clc3sywdiv3mw"]
 
 [ext_resource type="Script" uid="uid://clkxpx21wa5yx" path="res://scripts/ui/screens/main_menu.gd" id="1_j84ir"]
-[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/plus.svg" id="1_nee2d"]
-[ext_resource type="Texture2D" uid="uid://b6tbwsrx3kxwt" path="res://assets/icons/folder.svg" id="2_j84ir"]
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/actions/plus.svg" id="1_nee2d"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_m0oku"]
 particle_flag_disable_z = true
@@ -14,6 +13,9 @@ linear_accel_max = 5.9999976
 scale_min = 2.0
 scale_max = 4.0
 color = Color(0.4862745, 0.43529412, 0.9411765, 0.24705882)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_nee2d"]
+load_path = "res://.godot/imported/folder.svg-faf38980413b7388024599b28de02701.ctex"
 
 [node name="MainMenu" type="Control" unique_id=668298992]
 layout_mode = 3
@@ -72,7 +74,7 @@ custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Open Project"
-icon = ExtResource("2_j84ir")
+icon = SubResource("CompressedTexture2D_nee2d")
 
 [node name="RecentTitle" type="Label" parent="Center/Column" unique_id=884835405]
 layout_mode = 2
@@ -124,3 +126,13 @@ vertical_alignment = 1
 [node name="MonthEdit" type="LineEdit" parent="NewDialog/Form" unique_id=1310562243]
 layout_mode = 2
 placeholder_text = "YYYY-MM"
+
+[node name="SaveDialog" type="FileDialog" parent="." unique_id=1351080221]
+oversampling_override = 1.0
+title = "Save New Project"
+position = Vector2i(0, 36)
+unresizable = true
+ok_button_text = "Create Project"
+access = 2
+filters = PackedStringArray("*.gdwishes", "Projeto GDWishes")
+use_native_dialog = true

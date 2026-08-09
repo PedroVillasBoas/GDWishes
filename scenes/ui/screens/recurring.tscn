@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://c50x4taui371f"]
 
 [ext_resource type="Script" uid="uid://c0lubk4o60fe7" path="res://scripts/ui/screens/recurring.gd" id="1_m70ha"]
-[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/plus.svg" id="2_p5x7d"]
+[ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/actions/plus.svg" id="2_p5x7d"]
 
 [node name="Recurring" type="ScrollContainer" unique_id=436712983]
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2

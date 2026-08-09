@@ -1,4 +1,5 @@
 extends VBoxContainer
+## Wishes screen | card grid, contributions, detail dialog with simulator, celebration
 
 @onready var _grid: GridContainer = $Scroll/CardGrid
 @onready var _wish_dialog: ConfirmationDialog = $WishDialog
@@ -7,12 +8,12 @@ extends VBoxContainer
 var _editing: Wish = null
 var _deposit_target: Wish = null
 var _detail_wish: Wish = null
-var _progress_before := {}      # wish_id -> float (to detect 100% overlap)
-var _empty: EmptyState = null   # empty-state
+var _progress_before := {}      # wish_id -> float, to detect crossing 100%
+var _empty: EmptyState = null
 
 func _ready() -> void:
 	UiUtils.hide_dialogs(self)
-	
+	Icons.decorate($Toolbar/AddWishButton, "wishes", "Novo Wish")
 	$Toolbar/AddWishButton.pressed.connect(_open_wish_dialog.bind(null))
 	$Toolbar/ShowArchived.toggled.connect(func(_v): _refresh())
 	_wish_dialog.confirmed.connect(_save_wish)
@@ -20,6 +21,7 @@ func _ready() -> void:
 	$WishDialog/Form/CompositeCheck.toggled.connect(
 		func(on): $WishDialog/Form/GoalEdit.editable = not on)
 	EventBus.data_changed.connect(func(w): if w == "wishes": _refresh())
+	Themes.theme_changed.connect(_refresh)
 	_refresh()
 
 func _refresh() -> void:
@@ -32,16 +34,16 @@ func _refresh() -> void:
 	var shown := 0
 	for w in App.project.wishes:
 		if w.parent_id != "":
-			continue   # The grid shows only the root items | children appear in the card/detail view
+			continue   # The grid shows roots only | Children appear inside the card
 		if w.status == "archived" and not show_archived:
 			continue
 		_grid.add_child(_make_card(w))
 		shown += 1
 	
-	# empty-state | new project always lands here
+	# A new project ALWAYS lands here
 	if shown == 0:
-		_empty = EmptyState.make("✨", "Nenhum wish ainda — crie seu primeiro sonho.",
-			"✦ Novo Wish", _open_wish_dialog.bind(null))
+		_empty = EmptyState.make("wishes", "Nenhum wish ainda — crie seu primeiro sonho.",
+			"Novo Wish", _open_wish_dialog.bind(null))
 		$Scroll.visible = false
 		add_child(_empty)
 	else:
@@ -56,11 +58,20 @@ func _make_card(w: Wish) -> PanelContainer:
 
 	var top := HBoxContainer.new()
 	col.add_child(top)
+	
+	# Title row | status icon + name, so the state reads at a glance
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 8)
+	title_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_row.add_child(Icons.make_texture_rect(
+		"trophy" if w.status != "active" else "wishes", 20,
+		Themes.wish if w.status != "active" else Themes.accent))
 	var name_l := Label.new()
-	name_l.text = ("🏆 " if w.status != "active" else "✦ ") + w.name
+	name_l.text = w.name
 	name_l.theme_type_variation = "H2"
 	name_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	top.add_child(name_l)
+	title_row.add_child(name_l)
+	top.add_child(title_row)
 	var ring := ProgressRing.new()
 	ring.custom_minimum_size = Vector2(72, 72)
 	top.add_child(ring)
@@ -74,10 +85,14 @@ func _make_card(w: Wish) -> PanelContainer:
 	info.theme_type_variation = "Dim"
 	col.add_child(info)
 	if w.target_month != "":
-		var target := Label.new()
-		target.text = "🎯 alvo: " + Fmt.month_label(w.target_month, true)
-		target.theme_type_variation = "Dim"
-		col.add_child(target)
+		var target_row := HBoxContainer.new()
+		target_row.add_theme_constant_override("separation", 6)
+		target_row.add_child(Icons.make_texture_rect("target", 14, Themes.text_dim))
+		var target_l := Label.new()
+		target_l.text = "alvo: " + Fmt.month_label(w.target_month, true)
+		target_l.theme_type_variation = "Dim"
+		target_row.add_child(target_l)
+		col.add_child(target_row)
 	for child in App.project.children_of(w.id):
 		if child.status == "archived": continue
 		var cl := Label.new()
@@ -93,19 +108,21 @@ func _make_card(w: Wish) -> PanelContainer:
 	col.add_child(buttons)
 	if w.status == "active":
 		var dep_b := Button.new()
-		dep_b.text = "＋ Aportar"
 		dep_b.theme_type_variation = "PrimaryButton"
+		Icons.decorate(dep_b, "deposit", "Aportar")
 		dep_b.pressed.connect(_open_deposit.bind(w))
 		buttons.add_child(dep_b)
 		if WishEngine.progress_of(App.project, w) >= 1.0:
 			var buy_b := Button.new()
-			buy_b.text = "🛒 Comprei!"
+			Icons.decorate(buy_b, "cart", "Comprei!")
 			buy_b.pressed.connect(_complete.bind(w))
 			buttons.add_child(buy_b)
 	var det_b := Button.new()
-	det_b.text = "Detalhes"
+	Icons.decorate(det_b, "search", "Detalhes")
 	det_b.pressed.connect(_open_detail.bind(w))
 	buttons.add_child(det_b)
+	
+	# Hover
 	card.mouse_entered.connect(func():
 		create_tween().tween_property(card, "modulate", Color(1.06, 1.06, 1.1), 0.1))
 	card.mouse_exited.connect(func():
@@ -192,7 +209,7 @@ func _root_of(w: Wish) -> Wish:
 		cur = parent
 	return cur
 
-# --- Details | Simulator
+# --- Detail + Simulator
 
 func _open_detail(w: Wish) -> void:
 	_detail_wish = w
@@ -202,12 +219,12 @@ func _open_detail(w: Wish) -> void:
 	var deposits := App.project.wish_deposits.filter(func(d): return d.wish_id == w.id)
 	deposits.sort_custom(func(a, b): return a.month > b.month)
 	if deposits.is_empty():
-		col.get_node("HistoryList").add_child(EmptyState.make("📥",
+		col.get_node("HistoryList").add_child(EmptyState.make("deposit",
 			"Nenhum aporte ainda.", "", Callable(), true))
 	for d in deposits:
 		var l := Label.new()
 		l.text = "%s   %s" % [Fmt.month_label(d.month, true), Fmt.money(d.amount_cents)]
-		l.modulate = ThemeBuilder.INCOME if d.amount_cents > 0 else ThemeBuilder.EXPENSE
+		l.modulate = Themes.income if d.amount_cents > 0 else Themes.expense
 		col.get_node("HistoryList").add_child(l)
 	var slider: HSlider = col.get_node("SimRow/SimSlider")
 	if not slider.value_changed.is_connected(_update_sim):
@@ -219,20 +236,20 @@ func _open_detail(w: Wish) -> void:
 
 func _update_sim(value: float) -> void:
 	var col := $DetailDialog/Col
-	var monthly := int(value) * 100   # slider em reais -> centavos
+	var monthly := int(value) * 100   # Slider is in Reais -> cents
 	col.get_node("SimRow/SimValue").text = Fmt.money(monthly)
 	var done := WishEngine.completion_month(App.project, _detail_wish, monthly, Fmt.current_month())
 	if done == "":
 		col.get_node("SimResult").text = "—"
 	else:
-		col.get_node("SimResult").text = "Aportando %s/mês, você conclui em %s 🎉" % \
+		col.get_node("SimResult").text = "Aportando %s/mês, você conclui em %s" % \
 			[Fmt.money(monthly), Fmt.month_label(done)]
 
-# --- Conclude | Celebration
+# --- Complete + Celebration
 
 func _complete(w: Wish) -> void:
 	var dlg := ConfirmationDialog.new()
-	dlg.title = "Comprei! 🛒"
+	dlg.title = "Comprei!"
 	dlg.dialog_text = "Gerar um lançamento de saída de %s e arquivar \"%s\"?" % \
 		[Fmt.money(WishEngine.saved_of(App.project, w)), w.name]
 	dlg.ok_button_text = "Gerar e arquivar"
@@ -254,4 +271,4 @@ func _celebrate(w: Wish) -> void:
 	var p: CPUParticles2D = $Celebration
 	p.global_position = get_viewport_rect().size / 2.0
 	p.restart()
-	EventBus.toast("🎉 %s completo! Meta atingida!" % w.name, "success")
+	EventBus.toast("%s completo! Meta atingida!" % w.name, "success")

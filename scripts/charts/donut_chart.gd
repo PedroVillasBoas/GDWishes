@@ -1,6 +1,6 @@
 class_name DonutChart
 extends ChartBase
-## Slices: [{"label": String, "value": cents, "color": Color}]
+## Slices | [{"label": String, "value": cents, "color": Color}]
 
 signal slice_clicked(label: String)
 
@@ -34,11 +34,11 @@ func _draw() -> void:
 		draw_arc(center, radius - thickness / 2.0, start, start + sweep, 48, col, thickness, true)
 		start += sweep
 	
-	# Total in the center
+	# Total in the middle
 	var text := Fmt.money(total)
 	var ts := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, 15)
 	draw_string(font, center - Vector2(ts.x / 2.0, -4), text,
-		HORIZONTAL_ALIGNMENT_CENTER, -1, 15, ThemeBuilder.TEXT)
+		HORIZONTAL_ALIGNMENT_CENTER, -1, 15, Themes.text)
 	
 	# Legend on the right
 	var ly := 20.0
@@ -47,7 +47,7 @@ func _draw() -> void:
 		draw_rect(Rect2(lx, ly - 9, 12, 12), slices[i].color, true)
 		draw_string(font, Vector2(lx + 18, ly + 2), "%s — %s" % [slices[i].label,
 			Fmt.money(slices[i].value)], HORIZONTAL_ALIGNMENT_LEFT, size.x - lx - 24, 13,
-			ThemeBuilder.TEXT if i != _hover else Color.WHITE)
+			Themes.text if i != _hover else Color.WHITE)
 		ly += 22
 	draw_chart_tooltip()
 
