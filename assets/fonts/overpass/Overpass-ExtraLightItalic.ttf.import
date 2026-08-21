@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://drcd35hm6ejfl"
-path="res://.godot/imported/Kenney Future Narrow.ttf-ef7e34836d9e5dc059ca737da9380cb7.fontdata"
+uid="uid://c4vt7twx052hr"
+path="res://.godot/imported/Overpass-ExtraLightItalic.ttf-30f8203a38fdf4e65cc63ce4ae5a8c4e.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Kenney Future Narrow.ttf"
-dest_files=["res://.godot/imported/Kenney Future Narrow.ttf-ef7e34836d9e5dc059ca737da9380cb7.fontdata"]
+source_file="res://assets/fonts/overpass/Overpass-ExtraLightItalic.ttf"
+dest_files=["res://.godot/imported/Overpass-ExtraLightItalic.ttf-30f8203a38fdf4e65cc63ce4ae5a8c4e.fontdata"]
 
 [params]
 

@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://blhlrl0d1mblw"
-path="res://.godot/imported/Kenney Future.ttf-845b8d86f13614effd75cae8b9fe56b9.fontdata"
+uid="uid://bkbfilqovtecx"
+path="res://.godot/imported/Figtree-BlackItalic.ttf-cc1af299782d09f5fb4c21ad411233a9.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Kenney Future.ttf"
-dest_files=["res://.godot/imported/Kenney Future.ttf-845b8d86f13614effd75cae8b9fe56b9.fontdata"]
+source_file="res://assets/fonts/figtree/Figtree-BlackItalic.ttf"
+dest_files=["res://.godot/imported/Figtree-BlackItalic.ttf-cc1af299782d09f5fb4c21ad411233a9.fontdata"]
 
 [params]
 

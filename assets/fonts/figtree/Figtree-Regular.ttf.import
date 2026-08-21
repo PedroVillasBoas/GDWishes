@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://n5lvdglrdyp4"
-path="res://.godot/imported/pixelplay.ttf-71f6955b04d3fc96002a1ddb2f424aa6.fontdata"
+uid="uid://cfht0fmrge513"
+path="res://.godot/imported/Figtree-Regular.ttf-f31c6c8bcfe5bb397cc3166ab218e937.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/pixelplay.ttf"
-dest_files=["res://.godot/imported/pixelplay.ttf-71f6955b04d3fc96002a1ddb2f424aa6.fontdata"]
+source_file="res://assets/fonts/figtree/Figtree-Regular.ttf"
+dest_files=["res://.godot/imported/Figtree-Regular.ttf-f31c6c8bcfe5bb397cc3166ab218e937.fontdata"]
 
 [params]
 
@@ -22,8 +22,8 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 modulate_color_glyphs=false
-hinting=1
-subpixel_positioning=1
+hinting=3
+subpixel_positioning=4
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null

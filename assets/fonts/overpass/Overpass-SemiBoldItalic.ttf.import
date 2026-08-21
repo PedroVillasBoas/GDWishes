@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cqbj20g47jpcw"
-path="res://.godot/imported/ElmsSans.ttf-337bc1ba240c61619662dfe24733822a.fontdata"
+uid="uid://1hfshyumcngo"
+path="res://.godot/imported/Overpass-SemiBoldItalic.ttf-0faad59f51c02e3677a771cadbf3685c.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/ElmsSans.ttf"
-dest_files=["res://.godot/imported/ElmsSans.ttf-337bc1ba240c61619662dfe24733822a.fontdata"]
+source_file="res://assets/fonts/overpass/Overpass-SemiBoldItalic.ttf"
+dest_files=["res://.godot/imported/Overpass-SemiBoldItalic.ttf-0faad59f51c02e3677a771cadbf3685c.fontdata"]
 
 [params]
 
