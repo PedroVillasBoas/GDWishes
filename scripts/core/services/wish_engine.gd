@@ -70,7 +70,7 @@ static func completion_month(p: FinanceProject, w: Wish, monthly_cents: int, sta
 static func complete_purchase(p: FinanceProject, w: Wish, category_id: String,
 		month: String, create_transaction: bool) -> void:
 	var saved := saved_of(p, w)
-	_archive_recursive(p, w)
+	archive_recursive(p, w)
 	if create_transaction and saved > 0:
 		Ledger.add_transaction(p, {
 			"description": "Wish concluído: %s" % w.name,
@@ -80,7 +80,53 @@ static func complete_purchase(p: FinanceProject, w: Wish, category_id: String,
 			"date": month + "-01", "month": month, "notes": "Gerado pelo GDWishes",
 		})
 
-static func _archive_recursive(p: FinanceProject, w: Wish) -> void:
+static func archive_recursive(p: FinanceProject, w: Wish) -> void:
 	w.status = "archived"
 	for child in p.children_of(w.id):
-		_archive_recursive(p, child)
+		archive_recursive(p, child)
+
+# --- Removal | Archive and Delete
+
+## How much money comes back to the Free Balance if this wish is removed.
+##
+## Free Balance = total balance - total_reserved(), and total_reserved() only counts
+## ACTIVE root wishes. So whatever an active subtree holds is exactly what gets
+## released when it stops being active — and an already archived wish releases
+## nothing, because it was never being counted.
+static func releasable_of(p: FinanceProject, w: Wish) -> int:
+	if w.status == "archived":
+		return 0
+	return saved_of(p, w)
+
+## Archives a wish and its whole subtree. Deposits are kept as history; the money
+## is freed because archived wishes drop out of total_reserved().
+## Returns the amount released back to the Free Balance.
+static func archive(p: FinanceProject, w: Wish) -> int:
+	var released := releasable_of(p, w)
+	archive_recursive(p, w)
+	return released
+
+## Deletes a wish, its whole subtree, and every deposit made to any of them.
+## Returns the amount released back to the Free Balance.
+static func delete(p: FinanceProject, w: Wish) -> int:
+	var released := releasable_of(p, w)
+	var doomed := _subtree_ids(p, w)
+	# Deposits are removed outright: unlike archiving there is no wish left to
+	# hang the history on, and leaving them would keep the money reserved forever.
+	var surviving: Array[WishDeposit] = []
+	for d in p.wish_deposits:
+		if not (d.wish_id in doomed):
+			surviving.append(d)
+	p.wish_deposits = surviving
+	var kept: Array[Wish] = []
+	for x in p.wishes:
+		if not (x.id in doomed):
+			kept.append(x)
+	p.wishes = kept
+	return released
+
+static func _subtree_ids(p: FinanceProject, w: Wish) -> Array[String]:
+	var ids: Array[String] = [w.id]
+	for child in p.children_of(w.id):
+		ids.append_array(_subtree_ids(p, child))
+	return ids

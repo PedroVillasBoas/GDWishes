@@ -6,14 +6,18 @@ signal undo_pressed
 
 const LIFETIME := 4.0
 
+@onready var _message: Label = %Message
+@onready var _undo_button: Button = %UndoButton
+
 func _ready() -> void:
-	$Row/UndoButton.pressed.connect(func():
+	_undo_button.text = Lang.t("generic.undo")
+	_undo_button.pressed.connect(func():
 		undo_pressed.emit()
 		queue_free())
 
 func setup(message: String, kind: String) -> void:
-	$Row/Message.text = message
-	$Row/UndoButton.visible = kind == "undo"
+	_message.text = message
+	_undo_button.visible = kind == "undo"
 	
 	# Palette colors cannot live in a 'const'
 	# Consts resolve at parse time, before the Themes autoload exists

@@ -18,6 +18,7 @@ script = ExtResource("1_gyfhh")
 layout_mode = 2
 
 [node name="ShowArchived" type="CheckBox" parent="Toolbar" unique_id=2005280353]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Show Archived"
 
@@ -26,15 +27,18 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="AddWishButton" type="Button" parent="Toolbar" unique_id=699741235]
+unique_name_in_owner = true
 layout_mode = 2
 text = "New Wish"
 icon = ExtResource("1_7yk3f")
 
 [node name="Scroll" type="ScrollContainer" parent="." unique_id=1583267687]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="CardGrid" type="GridContainer" parent="Scroll" unique_id=421327068]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/h_separation = 16
@@ -42,24 +46,26 @@ theme_override_constants/v_separation = 16
 columns = 3
 
 [node name="WishDialog" type="ConfirmationDialog" parent="." unique_id=1799876365]
+unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Wish"
-position = Vector2i(0, 36)
-size = Vector2i(300, 252)
+size = Vector2i(440, 380)
 ok_button_text = "Save"
 
 [node name="Form" type="VBoxContainer" parent="WishDialog" unique_id=838743054]
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 292.0
-offset_bottom = 203.0
+offset_right = 432.0
+offset_bottom = 331.0
 theme_override_constants/separation = 10
 
-[node name="NameEdit" type="LineEdit" parent="WishDialog/Form" unique_id=546379332]
+[node name="WishNameEdit" type="LineEdit" parent="WishDialog/Form" unique_id=546379332]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Wish Name"
 
 [node name="ParentSelect" type="OptionButton" parent="WishDialog/Form" unique_id=1458293090]
+unique_name_in_owner = true
 layout_mode = 2
 selected = 0
 item_count = 1
@@ -67,46 +73,75 @@ popup/item_0/text = "Single Wish"
 popup/item_0/id = 0
 
 [node name="CompositeCheck" type="CheckBox" parent="WishDialog/Form" unique_id=1670655786]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Composite Wish"
 
 [node name="GoalEdit" type="LineEdit" parent="WishDialog/Form" unique_id=1901929592]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Goal (R$)"
 
 [node name="TargetEdit" type="LineEdit" parent="WishDialog/Form" unique_id=1598603561]
+unique_name_in_owner = true
 layout_mode = 2
-placeholder_text = "Target Month YYYY-MM (Optional)"
+placeholder_text = "Target Month (Optional)"
+
+[node name="PriorityLabel" type="Label" parent="WishDialog/Form" unique_id=1922178481]
+layout_mode = 2
+text = "Priority"
+
+[node name="PrioritySelect" type="OptionButton" parent="WishDialog/Form" unique_id=102243868]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="IconColorLabel" type="Label" parent="WishDialog/Form" unique_id=1217215184]
+layout_mode = 2
+text = "Icon Color"
+
+[node name="IconColorPick" type="ColorPickerButton" parent="WishDialog/Form" unique_id=289365410]
+unique_name_in_owner = true
+layout_mode = 2
+edit_alpha = false
 
 [node name="DepositDialog" type="ConfirmationDialog" parent="." unique_id=1757256134]
+unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Aport"
 position = Vector2i(0, 36)
-size = Vector2i(270, 162)
+size = Vector2i(270, 192)
 ok_button_text = "Aport"
 
 [node name="Form" type="VBoxContainer" parent="DepositDialog" unique_id=876830586]
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 262.0
-offset_bottom = 113.0
+offset_bottom = 143.0
 theme_override_constants/separation = 10
 
-[node name="AmountEdit" type="LineEdit" parent="DepositDialog/Form" unique_id=1376308415]
+[node name="DepositTargetSelect" type="OptionButton" parent="DepositDialog/Form" unique_id=1476195411]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DepositAmountEdit" type="LineEdit" parent="DepositDialog/Form" unique_id=1376308415]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Value (negative = withdrawal)"
 
-[node name="MonthEdit" type="LineEdit" parent="DepositDialog/Form" unique_id=1103344624]
+[node name="DepositMonthEdit" type="LineEdit" parent="DepositDialog/Form" unique_id=1103344624]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "YYYY-MM"
 
 [node name="FreeBalanceLabel" type="Label" parent="DepositDialog/Form" unique_id=507988758]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="DetailDialog" type="AcceptDialog" parent="." unique_id=159519808]
+unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Details"
-size = Vector2i(476, 203)
+size = Vector2i(476, 211)
 ok_button_text = "Close"
 
 [node name="Col" type="VBoxContainer" parent="DetailDialog" unique_id=709698782]
@@ -114,7 +149,7 @@ custom_minimum_size = Vector2(460, 0)
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 468.0
-offset_bottom = 154.0
+offset_bottom = 162.0
 theme_override_constants/separation = 10
 
 [node name="HistoryTitle" type="Label" parent="DetailDialog/Col" unique_id=404658214]
@@ -122,6 +157,7 @@ layout_mode = 2
 text = "Aport History"
 
 [node name="HistoryList" type="VBoxContainer" parent="DetailDialog/Col" unique_id=1890690914]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Sep" type="HSeparator" parent="DetailDialog/Col" unique_id=407892447]
@@ -140,20 +176,25 @@ layout_mode = 2
 text = "Monthly Aport:"
 
 [node name="SimSlider" type="HSlider" parent="DetailDialog/Col/SimRow" unique_id=1274232210]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 1000000.0
+max_value = 50000.0
+step = 50.0
 
-[node name="SimValue" type="Label" parent="DetailDialog/Col/SimRow" unique_id=338724082]
-custom_minimum_size = Vector2(110, 0)
+[node name="SimValueEdit" type="LineEdit" parent="DetailDialog/Col/SimRow" unique_id=1996426348]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-text = "0,00"
-horizontal_alignment = 2
+placeholder_text = "0,00"
+alignment = 2
 
 [node name="SimResult" type="Label" parent="DetailDialog/Col" unique_id=1679477606]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Celebration" type="CPUParticles2D" parent="." unique_id=1469923531]
+unique_name_in_owner = true
 position = Vector2(392, 8)
 emitting = false
 amount = 120

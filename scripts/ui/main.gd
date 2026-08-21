@@ -4,9 +4,9 @@ extends Control
 const SCREEN_MENU := "res://scenes/ui/screens/main_menu.tscn"
 const SCREEN_SHELL := "res://scenes/ui/screens/project_shell.tscn"
 
-@onready var _host: MarginContainer = $ScreenHost
-@onready var _toasts: VBoxContainer = $ToastLayer
-@onready var _background: ColorRect = $Background
+@onready var _host: MarginContainer = %ScreenHost
+@onready var _toasts: VBoxContainer = %ToastLayer
+@onready var _background: ColorRect = %Background
 
 var _current: Node = null
 

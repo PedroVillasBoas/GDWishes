@@ -2,7 +2,9 @@
 
 [ext_resource type="Script" uid="uid://dw0b5qthmsdg1" path="res://scripts/resources/theme_registry.gd" id="1_48uhy"]
 [ext_resource type="Script" uid="uid://4mdmplyk1ron" path="res://scripts/resources/gd_theme.gd" id="2_1iygm"]
+[ext_resource type="Resource" uid="uid://ddsfyunn031wb" path="res://resources/themes/gd_theme.tres" id="3_1iygm"]
 
 [resource]
 script = ExtResource("1_48uhy")
+themes = Array[ExtResource("2_1iygm")]([ExtResource("3_1iygm")])
 metadata/_custom_type_script = "uid://dw0b5qthmsdg1"

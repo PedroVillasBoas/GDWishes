@@ -5,6 +5,7 @@ extends ChartBase
 var points: Array[Dictionary] = []
 
 func set_data(data: Array[Dictionary]) -> void:
+	clear_tooltip()   # stale label from the previous dataset must not survive a refresh
 	points = data
 	play_intro()
 

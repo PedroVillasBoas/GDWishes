@@ -1,7 +1,11 @@
 [gd_resource type="Resource" script_class="GDTheme" format=3 uid="uid://ddsfyunn031wb"]
 
 [ext_resource type="Script" uid="uid://4mdmplyk1ron" path="res://scripts/resources/gd_theme.gd" id="1_8wygo"]
+[ext_resource type="Theme" uid="uid://chlnkbertyww3" path="res://resources/themes/ornate/ornate-theme.tres" id="2_cp0hn"]
 
 [resource]
 script = ExtResource("1_8wygo")
+id = &"ornate"
+display_name = "Ornate"
+theme = ExtResource("2_cp0hn")
 metadata/_custom_type_script = "uid://4mdmplyk1ron"

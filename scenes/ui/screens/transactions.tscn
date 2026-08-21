@@ -18,23 +18,18 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="SearchEdit" type="LineEdit" parent="Toolbar" unique_id=38820085]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 placeholder_text = "Search..."
 right_icon = ExtResource("1_aqsrs")
 
 [node name="TypeFilter" type="OptionButton" parent="Toolbar" unique_id=1880563128]
+unique_name_in_owner = true
 layout_mode = 2
-selected = 0
-item_count = 3
-popup/item_0/text = "All"
-popup/item_0/id = 0
-popup/item_1/text = "Entries"
-popup/item_1/id = 1
-popup/item_2/text = "Outputs"
-popup/item_2/id = 2
 
 [node name="CategoryFilter" type="OptionButton" parent="Toolbar" unique_id=1411504197]
+unique_name_in_owner = true
 layout_mode = 2
 selected = 0
 search_bar_enabled = true
@@ -47,11 +42,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="AddButton" type="Button" parent="Toolbar" unique_id=921698445]
+unique_name_in_owner = true
 layout_mode = 2
 text = "New Entry"
 icon = ExtResource("2_o4pnw")
 
 [node name="Table" type="Tree" parent="." unique_id=1200422847]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 columns = 8
@@ -59,6 +56,8 @@ column_titles_visible = true
 hide_root = true
 
 [node name="FormPanel" type="PanelContainer" parent="." unique_id=143195428]
+unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="Form" type="VBoxContainer" parent="FormPanel" unique_id=1521442024]
@@ -66,6 +65,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="FormTitle" type="Label" parent="FormPanel/Form" unique_id=1590917331]
+unique_name_in_owner = true
 layout_mode = 2
 text = "New Entry"
 
@@ -77,31 +77,28 @@ columns = 4
 
 [node name="L1" type="Label" parent="FormPanel/Form/Grid" unique_id=1485204667]
 layout_mode = 2
-text = "Description"
+text = "Name"
 
-[node name="DescEdit" type="LineEdit" parent="FormPanel/Form/Grid" unique_id=1775478337]
+[node name="NameEdit" type="LineEdit" parent="FormPanel/Form/Grid" unique_id=1775478337]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "Entry's Description"
+placeholder_text = "Entry's Name"
 
 [node name="L2" type="Label" parent="FormPanel/Form/Grid" unique_id=1530979176]
 layout_mode = 2
 text = "Type"
 
 [node name="TypeSelect" type="OptionButton" parent="FormPanel/Form/Grid" unique_id=2025219490]
+unique_name_in_owner = true
 layout_mode = 2
-selected = 0
-item_count = 2
-popup/item_0/text = "Entry"
-popup/item_0/id = 0
-popup/item_1/text = "Output"
-popup/item_1/id = 1
 
 [node name="L3" type="Label" parent="FormPanel/Form/Grid" unique_id=1490096359]
 layout_mode = 2
 text = "Value"
 
 [node name="CurrencyInput" parent="FormPanel/Form/Grid" unique_id=1389215392 instance=ExtResource("3_g4uqo")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="L4" type="Label" parent="FormPanel/Form/Grid" unique_id=1687218412]
@@ -109,6 +106,7 @@ layout_mode = 2
 text = "Category"
 
 [node name="CategorySelect" type="OptionButton" parent="FormPanel/Form/Grid" unique_id=1305353948]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="L5" type="Label" parent="FormPanel/Form/Grid" unique_id=1663322196]
@@ -116,25 +114,21 @@ layout_mode = 2
 text = "Method"
 
 [node name="MethodSelect" type="OptionButton" parent="FormPanel/Form/Grid" unique_id=537823536]
+unique_name_in_owner = true
 layout_mode = 2
-selected = 0
-item_count = 4
-popup/item_0/text = "Credit"
-popup/item_0/id = 0
-popup/item_1/text = "Debit"
-popup/item_1/id = 1
-popup/item_2/text = "Pix"
-popup/item_2/id = 2
-popup/item_3/text = "Cash"
-popup/item_3/id = 3
 
-[node name="L6" type="Label" parent="FormPanel/Form/Grid" unique_id=235896494]
+[node name="InstallmentsLabel" type="Label" parent="FormPanel/Form/Grid" unique_id=235896494]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Installments"
 
 [node name="InstallmentsSpin" type="SpinBox" parent="FormPanel/Form/Grid" unique_id=1322896686]
+unique_name_in_owner = true
 layout_mode = 2
+min_value = 1.0
 max_value = 48.0
+value = 1.0
+allow_greater = true
 custom_arrow_step = 1.0
 
 [node name="L7" type="Label" parent="FormPanel/Form/Grid" unique_id=77648959]
@@ -142,15 +136,16 @@ layout_mode = 2
 text = "Date"
 
 [node name="DateEdit" type="LineEdit" parent="FormPanel/Form/Grid" unique_id=123049669]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "YYYY-MM-DD"
 
 [node name="L8" type="Label" parent="FormPanel/Form/Grid" unique_id=1572891698]
 layout_mode = 2
 text = "Notes"
 
 [node name="NotesEdit" type="LineEdit" parent="FormPanel/Form/Grid" unique_id=975396328]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Some note..."
@@ -161,11 +156,13 @@ theme_override_constants/separation = 8
 alignment = 2
 
 [node name="CancelButton" type="Button" parent="FormPanel/Form/FormButtons" unique_id=412431487]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Cancel"
 icon = ExtResource("5_bu8pt")
 
 [node name="SaveTxButton" type="Button" parent="FormPanel/Form/FormButtons" unique_id=1818629421]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Save"
 icon = ExtResource("6_rpqnb")

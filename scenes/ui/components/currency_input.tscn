@@ -13,14 +13,17 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="AmountEdit" type="LineEdit" parent="Row" unique_id=1166678685]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 placeholder_text = "0,00"
 alignment = 2
 
 [node name="CurrencySelect" type="OptionButton" parent="Row" unique_id=478911998]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(76, 0)
 layout_mode = 2
+selected = 0
 item_count = 2
 popup/item_0/text = "BRL"
 popup/item_0/id = 0
@@ -28,6 +31,7 @@ popup/item_1/text = "USD"
 popup/item_1/id = 1
 
 [node name="RateRow" type="HBoxContainer" parent="." unique_id=1262040602]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 8
@@ -37,12 +41,14 @@ layout_mode = 2
 text = "Rate"
 
 [node name="RateEdit" type="LineEdit" parent="RateRow" unique_id=2045160733]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "5,000000"
 alignment = 2
 
 [node name="Preview" type="Label" parent="." unique_id=1441043627]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "= R$ 0,00"

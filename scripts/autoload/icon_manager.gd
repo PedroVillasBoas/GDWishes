@@ -1,7 +1,7 @@
 extends Node
 ## Autoload "Icons" | serves textures from the IconSet resource
 
-const ICON_SET_PATH := "res://assets/icons/icon_set.tres"
+const ICON_SET_PATH := "res://resources/icon_set/icon_set.tres"
 
 var current: IconSet = null
 var _cache := {}
@@ -39,9 +39,7 @@ func make_texture_rect(icon_name: String, px := 24, tint := Color.WHITE) -> Text
 	tr.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return tr
 
-## Sets icon + text on a Button in one call, with consistent spacing.
-## Icons are white, so tint carries all the meaning: pass Themes.expense on a
-## delete button, Themes.income on a confirm, and so on.
+## Sets icon + text on a Button in one call, with consistent spacing
 func decorate(button: Button, icon_name: String, text := "",
 		tint := Color.WHITE) -> Button:
 	button.icon = get_icon(icon_name)

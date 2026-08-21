@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://lewdethatcu3" path="res://assets/icons/actions/plus.svg" id="2_p5x7d"]
 
 [node name="Recurring" type="ScrollContainer" unique_id=436712983]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -16,6 +17,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
 [node name="PendingPanel" type="PanelContainer" parent="Col" unique_id=190890080]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
@@ -23,16 +25,19 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="PendingTitle" type="Label" parent="Col/PendingPanel/PendingCol" unique_id=483276594]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Pending confirmation this month"
 
 [node name="PendingList" type="VBoxContainer" parent="Col/PendingPanel/PendingCol" unique_id=931383030]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="IncomeHeader" type="HBoxContainer" parent="Col" unique_id=924611773]
 layout_mode = 2
 
 [node name="IncomeTitle" type="Label" parent="Col/IncomeHeader" unique_id=1148843418]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Incomes"
 
@@ -41,11 +46,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="AddIncomeButton" type="Button" parent="Col/IncomeHeader" unique_id=1780094143]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Income"
 icon = ExtResource("2_p5x7d")
 
 [node name="IncomeList" type="VBoxContainer" parent="Col" unique_id=81286827]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
@@ -53,6 +60,7 @@ theme_override_constants/separation = 8
 layout_mode = 2
 
 [node name="CostTitle" type="Label" parent="Col/CostHeader" unique_id=1129855888]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Fixed Costs"
 
@@ -61,15 +69,18 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="AddCostButton" type="Button" parent="Col/CostHeader" unique_id=1665613717]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Cost"
 icon = ExtResource("2_p5x7d")
 
 [node name="CostList" type="VBoxContainer" parent="Col" unique_id=1730265139]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="EditDialog" type="ConfirmationDialog" parent="Col" unique_id=786067143]
+unique_name_in_owner = true
 oversampling_override = 1.0
 size = Vector2i(200, 230)
 ok_button_text = "Save"
@@ -81,20 +92,25 @@ offset_right = 192.0
 offset_bottom = 181.0
 theme_override_constants/separation = 10
 
-[node name="NameEdit" type="LineEdit" parent="Col/EditDialog/Form" unique_id=1593318516]
+[node name="RecNameEdit" type="LineEdit" parent="Col/EditDialog/Form" unique_id=1593318516]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Name"
 
 [node name="KindSelect" type="OptionButton" parent="Col/EditDialog/Form" unique_id=690028779]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="AmountEdit" type="LineEdit" parent="Col/EditDialog/Form" unique_id=328322408]
+[node name="RecAmountEdit" type="LineEdit" parent="Col/EditDialog/Form" unique_id=328322408]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Default Value (R$)"
 
-[node name="CategorySelect" type="OptionButton" parent="Col/EditDialog/Form" unique_id=1314450222]
+[node name="RecCategorySelect" type="OptionButton" parent="Col/EditDialog/Form" unique_id=1314450222]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="FromEdit" type="LineEdit" parent="Col/EditDialog/Form" unique_id=1423261435]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Active since YYYY-MM"

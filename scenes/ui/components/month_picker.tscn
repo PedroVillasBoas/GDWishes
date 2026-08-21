@@ -9,16 +9,19 @@ theme_override_constants/separation = 4
 script = ExtResource("1_vc450")
 
 [node name="PrevButton" type="Button" parent="." unique_id=1117153813]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 text = "<"
 
 [node name="MonthLabel" type="Button" parent="." unique_id=1696544515]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(130, 32)
 layout_mode = 2
 flat = true
 
 [node name="NextButton" type="Button" parent="." unique_id=1185594955]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 text = ">"

@@ -15,7 +15,6 @@ scale_max = 4.0
 color = Color(0.4862745, 0.43529412, 0.9411765, 0.24705882)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_nee2d"]
-load_path = "res://.godot/imported/folder.svg-faf38980413b7388024599b28de02701.ctex"
 
 [node name="MainMenu" type="Control" unique_id=668298992]
 layout_mode = 3
@@ -48,6 +47,7 @@ layout_mode = 2
 theme_override_constants/separation = 24
 
 [node name="Logo" type="Label" parent="Center/Column" unique_id=1028715468]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
 text = "GDWishes"
@@ -63,6 +63,7 @@ custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 
 [node name="NewButton" type="Button" parent="Center/Column" unique_id=1660357894]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -70,6 +71,7 @@ text = "New Project"
 icon = ExtResource("1_nee2d")
 
 [node name="OpenButton" type="Button" parent="Center/Column" unique_id=1072655052]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
@@ -77,21 +79,25 @@ text = "Open Project"
 icon = SubResource("CompressedTexture2D_nee2d")
 
 [node name="RecentTitle" type="Label" parent="Center/Column" unique_id=884835405]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Recent"
 
 [node name="RecentList" type="VBoxContainer" parent="Center/Column" unique_id=507961570]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="OpenDialog" type="FileDialog" parent="." unique_id=8767288]
+unique_name_in_owner = true
 title = "Open a File"
 file_mode = 0
 access = 2
-filters = PackedStringArray("*.gdwishes", "Projeto GDWishes")
+filters = PackedStringArray("*.gdwish ; GDWishes Project")
 use_native_dialog = true
 
 [node name="NewDialog" type="ConfirmationDialog" parent="." unique_id=2116070837]
+unique_name_in_owner = true
 oversampling_override = 1.0
 title = "New Project"
 position = Vector2i(0, 36)
@@ -112,7 +118,8 @@ text = "Project Name"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="NameEdit" type="LineEdit" parent="NewDialog/Form" unique_id=1819690886]
+[node name="ProjectNameEdit" type="LineEdit" parent="NewDialog/Form" unique_id=1819690886]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Project Wish"
 
@@ -124,15 +131,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MonthEdit" type="LineEdit" parent="NewDialog/Form" unique_id=1310562243]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "YYYY-MM"
 
 [node name="SaveDialog" type="FileDialog" parent="." unique_id=1351080221]
+unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Save New Project"
 position = Vector2i(0, 36)
 unresizable = true
 ok_button_text = "Create Project"
 access = 2
-filters = PackedStringArray("*.gdwishes", "Projeto GDWishes")
+filters = PackedStringArray("*.gdwish ; GDWishes Project")
 use_native_dialog = true

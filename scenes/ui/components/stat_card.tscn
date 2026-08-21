@@ -12,7 +12,9 @@ script = ExtResource("1_i11k3")
 layout_mode = 2
 
 [node name="Title" type="Label" parent="Col" unique_id=25064162]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Value" type="Label" parent="Col" unique_id=1132956612]
+unique_name_in_owner = true
 layout_mode = 2

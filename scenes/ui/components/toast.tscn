@@ -12,9 +12,11 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="Message" type="Label" parent="Row" unique_id=1384391542]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="UndoButton" type="Button" parent="Row" unique_id=501572962]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 text = "Undo"

@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://cidpb3wxahjid"]
+
+[ext_resource type="Texture2D" uid="uid://b73fsfmm4jtgh" path="res://assets/icons/navigation/wish.svg" id="1_jplm5"]
+[ext_resource type="Script" uid="uid://bb74rrf4xyjbt" path="res://scripts/ui/components/progress_ring.gd" id="2_ae8xt"]
+[ext_resource type="Texture2D" uid="uid://b476n2ehffjn3" path="res://assets/icons/actions/return.svg" id="3_ae8xt"]
+[ext_resource type="Texture2D" uid="uid://gvaciykd3qo1" path="res://assets/icons/finance/deposit.svg" id="4_r5ktt"]
+[ext_resource type="Texture2D" uid="uid://bthdge3inx42o" path="res://assets/icons/actions/search.svg" id="5_yr3yf"]
+[ext_resource type="Texture2D" uid="uid://d4a0fw2l0h1uc" path="res://assets/icons/actions/edit.svg" id="6_s3t4h"]
+[ext_resource type="Texture2D" uid="uid://db1lv2xe5ts0s" path="res://assets/icons/actions/open.svg" id="7_fj5vk"]
+[ext_resource type="Texture2D" uid="uid://bi31yn3uxaabr" path="res://assets/icons/actions/trash.svg" id="8_putgi"]
+
+[node name="WishCard" type="Control" unique_id=1649321583]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -860.0
+offset_bottom = -540.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1515568019]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MWish" type="MarginContainer" parent="PanelContainer" unique_id=1494467300]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VWish" type="VBoxContainer" parent="PanelContainer/MWish" unique_id=542136119]
+layout_mode = 2
+alignment = 1
+
+[node name="HRow1" type="HBoxContainer" parent="PanelContainer/MWish/VWish" unique_id=1916642804]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="WishIcon" type="TextureRect" parent="PanelContainer/MWish/VWish/HRow1" unique_id=1989556159]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("1_jplm5")
+
+[node name="LWishName" type="Label" parent="PanelContainer/MWish/VWish/HRow1" unique_id=1322393600]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wish Name"
+vertical_alignment = 1
+
+[node name="CPercent" type="PanelContainer" parent="PanelContainer/MWish/VWish/HRow1" unique_id=863542168]
+layout_mode = 2
+
+[node name="ProgressRing" type="Control" parent="PanelContainer/MWish/VWish/HRow1/CPercent" unique_id=1611017101]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+script = ExtResource("2_ae8xt")
+metadata/_custom_type_script = "uid://bb74rrf4xyjbt"
+
+[node name="CollapseButton" type="Button" parent="PanelContainer/MWish/VWish/HRow1" unique_id=1899104571]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+icon = ExtResource("3_ae8xt")
+flat = true
+
+[node name="HRow2" type="HBoxContainer" parent="PanelContainer/MWish/VWish" unique_id=1265444813]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LWishPriority" type="Label" parent="PanelContainer/MWish/VWish/HRow2" unique_id=1200585908]
+layout_mode = 2
+text = "Wish Priority"
+
+[node name="HInfo" type="HBoxContainer" parent="PanelContainer/MWish/VWish" unique_id=1971629029]
+layout_mode = 2
+alignment = 1
+
+[node name="HDeposited" type="HBoxContainer" parent="PanelContainer/MWish/VWish/HInfo" unique_id=1247894261]
+layout_mode = 2
+
+[node name="LDeposited" type="Label" parent="PanelContainer/MWish/VWish/HInfo/HDeposited" unique_id=2139238544]
+layout_mode = 2
+text = "R$ 0,00"
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MWish/VWish/HInfo/HDeposited" unique_id=1143017354]
+layout_mode = 2
+
+[node name="LTotal" type="Label" parent="PanelContainer/MWish/VWish/HInfo/HDeposited" unique_id=1556899011]
+layout_mode = 2
+text = "R$ 1.000,00"
+
+[node name="VSeparator" type="VSeparator" parent="PanelContainer/MWish/VWish/HInfo" unique_id=1272775007]
+layout_mode = 2
+
+[node name="HDeposited2" type="HBoxContainer" parent="PanelContainer/MWish/VWish/HInfo" unique_id=259453516]
+layout_mode = 2
+
+[node name="LMissing" type="Label" parent="PanelContainer/MWish/VWish/HInfo/HDeposited2" unique_id=1961716586]
+layout_mode = 2
+text = "Missing:"
+
+[node name="LAmountMissing" type="Label" parent="PanelContainer/MWish/VWish/HInfo/HDeposited2" unique_id=1949347656]
+layout_mode = 2
+text = "R$ 1.000,00"
+
+[node name="HActions" type="HBoxContainer" parent="PanelContainer/MWish/VWish" unique_id=1093373232]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="DepositButton" type="Button" parent="PanelContainer/MWish/VWish/HActions" unique_id=1453078578]
+layout_mode = 2
+icon = ExtResource("4_r5ktt")
+
+[node name="DetailsButton" type="Button" parent="PanelContainer/MWish/VWish/HActions" unique_id=1606948618]
+layout_mode = 2
+icon = ExtResource("5_yr3yf")
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/MWish/VWish/HActions" unique_id=1086790273]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EditButton" type="Button" parent="PanelContainer/MWish/VWish/HActions" unique_id=1510616470]
+layout_mode = 2
+icon = ExtResource("6_s3t4h")
+
+[node name="ArchiveButton" type="Button" parent="PanelContainer/MWish/VWish/HActions" unique_id=1349800659]
+layout_mode = 2
+icon = ExtResource("7_fj5vk")
+
+[node name="DeleteButton" type="Button" parent="PanelContainer/MWish/VWish/HActions" unique_id=1136051153]
+layout_mode = 2
+icon = ExtResource("8_putgi")

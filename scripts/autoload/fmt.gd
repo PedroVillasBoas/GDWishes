@@ -1,8 +1,7 @@
 extends Node
-## Autoload "Fmt" | pt-BR date/month formatting and helpers
-
-const MONTH_NAMES := ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
-const MONTH_SHORT := ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+## Autoload "Fmt" | money, rate, percent, month and date formatting.
+## Month names follow the language chosen in Settings; dates follow the format
+## chosen in Settings (see DateMask).
 
 ## 123456 -> "R$ 1.234,56" | -50 -> "-R$ 0,50"
 func money(cents: int, symbol := "R$ ") -> String:
@@ -11,7 +10,7 @@ func money(cents: int, symbol := "R$ ") -> String:
 	@warning_ignore("integer_division")
 	var int_part := str(int(v / 100))
 	var dec_part := "%02d" % (v % 100)
-	
+
 	# Groups thousands with "."
 	var grouped := ""
 	var count := 0
@@ -37,14 +36,15 @@ func current_month() -> String:
 	var d := Time.get_date_dict_from_system()
 	return "%04d-%02d" % [d.year, d.month]
 
-func month_label(key: String, short := false) -> String:  # "2026-04" -> "April 2026"
+## "2026-04" -> "April 2026" (or the current language's month name)
+func month_label(key: String, short := false) -> String:
 	var parts := key.split("-")
 	if parts.size() != 2:
 		return key
 	var m := int(parts[1]) - 1
 	if m < 0 or m > 11:
 		return key
-	var names := MONTH_SHORT if short else MONTH_NAMES
+	var names: Array = Lang.month_short() if short else Lang.month_names()
 	return "%s %s" % [names[m], parts[0]]
 
 func add_months(key: String, delta: int) -> String:
@@ -60,15 +60,22 @@ func months_between(from_key: String, to_key: String) -> Array[String]:
 	while k <= to_key:
 		result.append(k)
 		k = add_months(k, 1)
-		if result.size() > 1200:  # trava de segurança (100 anos)
+		if result.size() > 1200:  # safety stop (100 years)
 			break
 	return result
 
-## "2026-04-15" -> "15/04/2026" ; "2026-04" -> "04/2026"
-func date_br(iso: String) -> String:
+# --- Dates
+
+## "2026-04-15" -> "04-15-2026" (or whatever the Settings date format is).
+## A "YYYY-MM" month key is rendered as month + year, since it has no day.
+func date_display(iso: String) -> String:
 	var p := iso.split("-")
 	if p.size() == 3:
-		return "%s/%s/%s" % [p[2], p[1], p[0]]
+		return DateMask.from_iso(iso)
 	if p.size() == 2:
-		return "%s/%s" % [p[1], p[0]]
+		return month_label(iso, true)
 	return iso
+
+## Kept as an explicit name for places that always want day/month/year digits.
+func date_br(iso: String) -> String:
+	return date_display(iso)

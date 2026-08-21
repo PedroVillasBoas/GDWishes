@@ -1,12 +1,16 @@
 extends Control
 ## Main menu | Create a project (name -> month -> save location), open one, or pick from recents
 
-@onready var _recent_list: VBoxContainer = $Center/Column/RecentList
-@onready var _open_dialog: FileDialog = $OpenDialog
-@onready var _save_dialog: FileDialog = $SaveDialog
-@onready var _new_dialog: ConfirmationDialog = $NewDialog
-@onready var _name_edit: LineEdit = $NewDialog/Form/NameEdit
-@onready var _month_edit: LineEdit = $NewDialog/Form/MonthEdit
+@onready var _recent_list: VBoxContainer = %RecentList
+@onready var _recent_title: Label = %RecentTitle
+@onready var _new_button: Button = %NewButton
+@onready var _open_button: Button = %OpenButton
+@onready var _logo: Label = %Logo
+@onready var _open_dialog: FileDialog = %OpenDialog
+@onready var _save_dialog: FileDialog = %SaveDialog
+@onready var _new_dialog: ConfirmationDialog = %NewDialog
+@onready var _name_edit: LineEdit = %ProjectNameEdit
+@onready var _month_edit: LineEdit = %MonthEdit
 
 ## Form data held between the New Project dialog and the Save dialog
 var _pending_name := ""
@@ -14,32 +18,31 @@ var _pending_month := ""
 
 func _ready() -> void:
 	UiUtils.hide_dialogs(self)
-	$Center/Column/NewButton.pressed.connect(_on_new_pressed)
-	$Center/Column/OpenButton.pressed.connect(
-		_open_dialog.popup_centered.bind(Vector2i(800, 500)))
+	_apply_language()
+	_new_button.pressed.connect(_on_new_pressed)
+	_open_button.pressed.connect(_open_dialog.popup_centered.bind(Vector2i(800, 500)))
 	_open_dialog.file_selected.connect(_on_file_selected)
 	_save_dialog.file_selected.connect(_on_save_location_chosen)
 	_new_dialog.confirmed.connect(_on_new_confirmed)
-	_apply_icons()
 	_fill_recents()
-	
+
 	# Logo intro animation
-	var logo := $Center/Column/Logo
-	logo.pivot_offset = logo.size / 2.0
-	logo.scale = Vector2(0.9, 0.9)
-	create_tween().tween_property(logo, "scale", Vector2.ONE, 0.4)\
+	_logo.pivot_offset = _logo.size / 2.0
+	_logo.scale = Vector2(0.9, 0.9)
+	create_tween().tween_property(_logo, "scale", Vector2.ONE, 0.4)\
 		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
-func _apply_icons() -> void:
+func _apply_language() -> void:
 	# Icons live in code, not in the .tscn, so swapping the icon set is a one-line change
-	Icons.decorate($Center/Column/NewButton, "wishes", "Novo Projeto")
-	Icons.decorate($Center/Column/OpenButton, "open", "Abrir…")
+	Icons.decorate(_new_button, "wishes", Lang.t("menu.new_project"))
+	Icons.decorate(_open_button, "open", Lang.t("menu.open"))
+	_recent_title.text = Lang.t("menu.recent")
 
 func _fill_recents() -> void:
 	for child in _recent_list.get_children():
 		child.queue_free()
 	var recents := App.recent_files()
-	$Center/Column/RecentTitle.visible = not recents.is_empty()
+	_recent_title.visible = not recents.is_empty()
 	for path in recents:
 		var b := Button.new()
 		b.text = "%s   —   %s" % [path.get_file().get_basename(), path.get_base_dir()]
@@ -61,16 +64,21 @@ func _on_new_confirmed() -> void:
 	var pname := _name_edit.text.strip_edges()
 	var month := _month_edit.text.strip_edges()
 	if pname.is_empty():
-		EventBus.toast("Dê um nome ao projeto.", "error")
+		EventBus.toast(Lang.t("menu.name_required"), "error")
 		return
 	if not month.match("????-??") or not month.substr(0, 4).is_valid_int():
-		EventBus.toast("Mês inicial deve ser AAAA-MM (ex.: 2026-04).", "error")
+		EventBus.toast(Lang.t("menu.month_invalid"), "error")
 		return
 	_pending_name = pname
 	_pending_month = month
-	
-	# Ask where to save BEFORE creating anything, so the project exists on disk from the very first frame and autosave has a path to write to
-	_save_dialog.current_file = pname.to_snake_case() + ".gdwish"
+
+	# Ask where to save BEFORE creating anything, so the project exists on disk from
+	# the very first frame and autosave has a path to write to.
+	#
+	# No extension here on purpose: the native dialog appends the one declared by its
+	# filter. Supplying it as well is what produced file names carrying the extension
+	# two and three times over.
+	_save_dialog.current_file = pname.to_snake_case()
 	_save_dialog.popup_centered(Vector2i(800, 500))
 
 func _on_save_location_chosen(path: String) -> void:

@@ -2,88 +2,212 @@
 
 [ext_resource type="Script" uid="uid://cdv7vnk7vylhc" path="res://scripts/ui/screens/settings.gd" id="1_ghr4u"]
 
-[node name="Settings" type="VBoxContainer" unique_id=622029957]
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_constants/separation = 12
+[node name="Settings" type="TabContainer" unique_id=65853161]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tab_alignment = 1
+current_tab = 0
+use_hidden_tabs_for_min_size = true
 script = ExtResource("1_ghr4u")
 
-[node name="Card" type="PanelContainer" parent="." unique_id=783818715]
+[node name="Appearance" type="ScrollContainer" parent="." unique_id=868916345]
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 0
+
+[node name="AppearanceCol" type="VBoxContainer" parent="Appearance" unique_id=975118092]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="CTheme" type="PanelContainer" parent="Appearance/AppearanceCol" unique_id=1766650688]
 layout_mode = 2
 
-[node name="Grid" type="GridContainer" parent="Card" unique_id=1043955688]
+[node name="HTheme" type="HBoxContainer" parent="Appearance/AppearanceCol/CTheme" unique_id=2066909184]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LTheme" type="Label" parent="Appearance/AppearanceCol/CTheme/HTheme" unique_id=89511790]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Theme"
+horizontal_alignment = 1
+
+[node name="ThemeSelect" type="OptionButton" parent="Appearance/AppearanceCol/CTheme/HTheme" unique_id=663413044]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="L1" type="Label" parent="Card/Grid" unique_id=1068878991]
+[node name="CFont" type="PanelContainer" parent="Appearance/AppearanceCol" unique_id=196712689]
+layout_mode = 2
+
+[node name="HFont" type="HBoxContainer" parent="Appearance/AppearanceCol/CFont" unique_id=1777332342]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LFont" type="Label" parent="Appearance/AppearanceCol/CFont/HFont" unique_id=678835136]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Font"
+horizontal_alignment = 1
+
+[node name="FontSelect" type="OptionButton" parent="Appearance/AppearanceCol/CFont/HFont" unique_id=570524573]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Preferences" type="ScrollContainer" parent="." unique_id=544713315]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 1
+
+[node name="PreferencesCol" type="VBoxContainer" parent="Preferences" unique_id=1281269995]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="CLanguage" type="PanelContainer" parent="Preferences/PreferencesCol" unique_id=613560278]
+layout_mode = 2
+
+[node name="HLanguage" type="HBoxContainer" parent="Preferences/PreferencesCol/CLanguage" unique_id=615457035]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LLanguage" type="Label" parent="Preferences/PreferencesCol/CLanguage/HLanguage" unique_id=1938356742]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Language"
+horizontal_alignment = 1
+
+[node name="LanguageSelect" type="OptionButton" parent="Preferences/PreferencesCol/CLanguage/HLanguage" unique_id=1842811333]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CDateFormat" type="PanelContainer" parent="Preferences/PreferencesCol" unique_id=1831238338]
+layout_mode = 2
+
+[node name="HDateFormat" type="HBoxContainer" parent="Preferences/PreferencesCol/CDateFormat" unique_id=2146934073]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LDateFormat" type="Label" parent="Preferences/PreferencesCol/CDateFormat/HDateFormat" unique_id=1211251794]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Date Format"
+horizontal_alignment = 1
+
+[node name="DateFormatSelect" type="OptionButton" parent="Preferences/PreferencesCol/CDateFormat/HDateFormat" unique_id=843119577]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CAutosave" type="PanelContainer" parent="Preferences/PreferencesCol" unique_id=1201877183]
+layout_mode = 2
+
+[node name="HAutosave" type="HBoxContainer" parent="Preferences/PreferencesCol/CAutosave" unique_id=2043531613]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LAutosave" type="Label" parent="Preferences/PreferencesCol/CAutosave/HAutosave" unique_id=2106809060]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Date Format"
+horizontal_alignment = 1
+
+[node name="AutosaveCheck" type="CheckButton" parent="Preferences/PreferencesCol/CAutosave/HAutosave" unique_id=1164562558]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CInterval" type="PanelContainer" parent="Preferences/PreferencesCol" unique_id=1900312342]
+layout_mode = 2
+
+[node name="HInterval" type="HBoxContainer" parent="Preferences/PreferencesCol/CInterval" unique_id=875791617]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LInterval" type="Label" parent="Preferences/PreferencesCol/CInterval/HInterval" unique_id=1603485541]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Date Format"
+horizontal_alignment = 1
+
+[node name="AutosaveSpin" type="SpinBox" parent="Preferences/PreferencesCol/CInterval/HInterval" unique_id=1456161113]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 5.0
+max_value = 600.0
+step = 5.0
+value = 5.0
+
+[node name="Project" type="ScrollContainer" parent="." unique_id=2027159438]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 2
+
+[node name="ProjectCol" type="VBoxContainer" parent="Project" unique_id=1933571118]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="ProjGrid" type="GridContainer" parent="Project/ProjectCol" unique_id=644532675]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="L1" type="Label" parent="Project/ProjectCol/ProjGrid" unique_id=773376341]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Project Name"
 
-[node name="NameEdit" type="LineEdit" parent="Card/Grid" unique_id=941880326]
+[node name="NameEdit" type="LineEdit" parent="Project/ProjectCol/ProjGrid" unique_id=1114506706]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="L2" type="Label" parent="Card/Grid" unique_id=255982633]
+[node name="L2" type="Label" parent="Project/ProjectCol/ProjGrid" unique_id=53454136]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Exchange rate USD -> BRL "
+text = "Exchange Rate"
 
-[node name="RateEdit" type="LineEdit" parent="Card/Grid" unique_id=749088602]
-layout_mode = 2
-
-[node name="L3" type="Label" parent="Card/Grid" unique_id=13230796]
-layout_mode = 2
-text = "Base Income (USD)"
-
-[node name="SalaryUsdEdit" type="LineEdit" parent="Card/Grid" unique_id=1300428474]
+[node name="RateEdit" type="LineEdit" parent="Project/ProjectCol/ProjGrid" unique_id=1990108217]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="L4" type="Label" parent="Card/Grid" unique_id=261714904]
+[node name="L3" type="Label" parent="Project/ProjectCol/ProjGrid" unique_id=1292332301]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Base Income (BRL)"
+text = "USD Salary"
 
-[node name="SalaryBrlEdit" type="LineEdit" parent="Card/Grid" unique_id=333382660]
+[node name="SalaryUsdEdit" type="LineEdit" parent="Project/ProjectCol/ProjGrid" unique_id=39339766]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="L5" type="Label" parent="Card/Grid" unique_id=917598107]
+[node name="L4" type="Label" parent="Project/ProjectCol/ProjGrid" unique_id=357259453]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Hours per Day"
+text = "BRL Salary"
 
-[node name="HoursSpin" type="SpinBox" parent="Card/Grid" unique_id=592467126]
+[node name="SalaryBrlEdit" type="LineEdit" parent="Project/ProjectCol/ProjGrid" unique_id=1995953224]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="L5" type="Label" parent="Project/ProjectCol/ProjGrid" unique_id=415877272]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Work Hours"
+
+[node name="HoursSpin" type="SpinBox" parent="Project/ProjectCol/ProjGrid" unique_id=881190979]
+unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
 max_value = 24.0
 value = 1.0
 
-[node name="Spacer" type="Control" parent="Card/Grid" unique_id=454920887]
+[node name="ApplyButton" type="Button" parent="Project/ProjectCol" unique_id=1359626246]
+unique_name_in_owner = true
 layout_mode = 2
-
-[node name="ApplyButton" type="Button" parent="Card/Grid" unique_id=1256686785]
-layout_mode = 2
-text = "Apply"
-
-[node name="ImportCard" type="PanelContainer" parent="." unique_id=950952665]
-layout_mode = 2
-
-[node name="ImpCol" type="VBoxContainer" parent="ImportCard" unique_id=483284025]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="ImpTitle" type="Label" parent="ImportCard/ImpCol" unique_id=1435432461]
-layout_mode = 2
-text = "Migration"
-
-[node name="ImpHint" type="Label" parent="ImportCard/ImpCol" unique_id=1607645242]
-custom_minimum_size = Vector2(205, 50)
-layout_mode = 2
-text = "Import the CSVs exported from your Google Sheet."
-autowrap_mode = 3
-
-[node name="ImportButton" type="Button" parent="ImportCard/ImpCol" unique_id=1998939619]
-layout_mode = 2
-text = "Import folder of CSVs..."
-
-[node name="ImportDialog" type="FileDialog" parent="." unique_id=1713490039]
-oversampling_override = 1.0
-title = "Open a Directory"
-position = Vector2i(0, 36)
-file_mode = 2
-access = 2
-use_native_dialog = true
+text = "Save"

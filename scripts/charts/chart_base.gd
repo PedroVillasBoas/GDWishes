@@ -12,7 +12,18 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	resized.connect(queue_redraw)
 	Themes.theme_changed.connect(queue_redraw)
+	# _gui_input only fires while the cursor is inside, so a tooltip set on the last
+	# motion event would stay painted forever once the pointer leaves. mouse_exited
+	# is the only signal that reliably reports the departure.
+	mouse_exited.connect(clear_tooltip)
 	play_intro()
+
+## Hides the floating tooltip. Called on mouse exit and whenever data is replaced.
+func clear_tooltip() -> void:
+	if _tooltip_text == "":
+		return
+	_tooltip_text = ""
+	queue_redraw()
 
 func play_intro() -> void:
 	anim = 0.0

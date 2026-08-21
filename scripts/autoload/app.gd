@@ -5,19 +5,23 @@ extends Node
 const RECENT_PATH := "user://recent.json"
 const APP_SETTINGS_PATH := "user://app_settings.json"
 
+const PROJECT_EXTENSION := "gdwish"
+
 const DEFAULT_APP_SETTINGS := {
-	"theme": "dark_fintech",     # GDTheme.id
-	"font_index": -1,            # -1 = use the font declared inside the theme
+	"theme": "dark_fintech",       # GDTheme.id
+	"font_index": -1,              # -1 = use the font declared inside the theme
+	"language": "en",              # Lang id
+	"date_format": "MM-DD-YYYY",   # DD-MM-YYYY | MM-DD-YYYY | YYYY-MM-DD
 	"autosave_enabled": true,
-	"autosave_interval": 30.0,   # seconds
+	"autosave_interval": 30.0,     # seconds
+	"sidebar_collapsed": false,    # navigation sidebar folded to icons only
 }
 
 var project: FinanceProject = null
 var project_path: String = ""
 var dirty: bool = false
 
-## Application-level settings (NOT part of the .gdwish file — they follow the app,
-## not the project). Persisted in user://app_settings.json.
+## Application-level settings (NOT part of the .gdwish file — they follow the app, not the project). Persisted in user://app_settings.json.
 var app_settings: Dictionary = DEFAULT_APP_SETTINGS.duplicate()
 
 ## Global filter period: mode = "month" | "quarter" | "year" | "range" | "all"
@@ -38,21 +42,44 @@ func _ready() -> void:
 func has_project() -> bool:
 	return project != null
 
-# ---------- project lifecycle ----------
+# --- Project Lifecycle
+
+## Collapses any stack of trailing extensions down to a single ".gdwish".
+##
+## A native Save dialog appends the extension declared by its filter, so a
+## `current_file` that already carries one comes back doubled — and a naive
+## `if not ends_with(): path += ext` then adds a third. Rebuilding the name from
+## its stem is immune to however many the dialog piles on.
+static func normalize_project_path(path: String) -> String:
+	var dir := path.get_base_dir()
+	var stem := path.get_file()
+	while true:
+		var ext := stem.get_extension()
+		if ext == "":
+			break
+		# Only strip extensions that belong to us; a project legitimately named
+		# "budget.2026" must keep its ".2026".
+		if ext.to_lower() != PROJECT_EXTENSION and not ext.to_lower().begins_with(PROJECT_EXTENSION):
+			break
+		stem = stem.get_basename()
+	if stem.is_empty():
+		stem = "project"
+	var file_name := "%s.%s" % [stem, PROJECT_EXTENSION]
+	return file_name if dir.is_empty() else dir.path_join(file_name)
 
 ## Creates a project AND writes it to disk immediately. `path` comes from the
 ## Save dialog shown right after the New Project form is confirmed.
 ## Returns "" on success, or an error message.
 func new_project(pname: String, start_month: String, path: String) -> String:
-	if not path.ends_with(".gdwish"):
-		path += ".gdwish"
+	path = normalize_project_path(path)
 	var fresh := FinanceProject.new()
 	fresh.name = pname
 	fresh.created_at = Time.get_datetime_string_from_system()
 	fresh.start_month = start_month
 	_add_default_categories(fresh)
-	# Write BEFORE swapping state: if the disk write fails (read-only folder,
-	# bad path), the app keeps whatever was open instead of losing it.
+	
+	# Write BEFORE swapping state | 
+	# if the disk write fails (read-only folder, bad path), the app keeps whatever was open instead of losing it
 	var err := ProjectIO.save(fresh, path)
 	if err != "":
 		return err
@@ -93,9 +120,7 @@ func save_project() -> void:
 	EventBus.notify("saved")
 
 func save_project_as(path: String) -> void:
-	if not path.ends_with(".gdwish"):
-		path += ".gdwish"
-	project_path = path
+	project_path = normalize_project_path(path)
 	save_project()
 
 func close_project() -> void:
@@ -104,7 +129,7 @@ func close_project() -> void:
 	dirty = false
 	EventBus.project_closed.emit()
 
-## Call after ANY data change. Marks dirty, schedules autosave, notifies the UI.
+## Call after ANY data change | Marks dirty, schedules autosave, notifies the UI
 func touch(what: String) -> void:
 	dirty = true
 	_schedule_autosave()
@@ -115,18 +140,26 @@ func _schedule_autosave() -> void:
 		return
 	_autosave_timer.start(float(app_settings.autosave_interval))
 
-# ---------- application settings ----------
+# --- Application Settings
 
 func set_app_setting(key: String, value) -> void:
 	app_settings[key] = value
 	_save_app_settings()
-	# An interval change must affect the timer already counting down, otherwise
-	# the new value only takes effect after the next unrelated edit.
+	
+	# An interval change must affect the timer already counting down, otherwise the new value only takes effect after the next unrelated edit
 	if key in ["autosave_interval", "autosave_enabled"]:
 		if not app_settings.autosave_enabled:
 			_autosave_timer.stop()
 		elif dirty:
 			_schedule_autosave()
+
+## File name to preload into a Save dialog. Deliberately WITHOUT the extension:
+## the native dialog appends the one from its filter, and passing it here is what
+## produced the doubled-extension file names.
+func suggested_file_name() -> String:
+	if project == null or project.name.strip_edges().is_empty():
+		return "project"
+	return project.name.to_snake_case()
 
 func _load_app_settings() -> void:
 	app_settings = DEFAULT_APP_SETTINGS.duplicate()
@@ -136,7 +169,7 @@ func _load_app_settings() -> void:
 	var data = JSON.parse_string(f.get_as_text())
 	f.close()
 	if data is Dictionary:
-		for key in DEFAULT_APP_SETTINGS:   # ignore unknown / removed keys
+		for key in DEFAULT_APP_SETTINGS:   # Ignore unknown / Removed keys
 			if data.has(key):
 				app_settings[key] = data[key]
 
@@ -147,7 +180,7 @@ func _save_app_settings() -> void:
 	f.store_string(JSON.stringify(app_settings, "\t"))
 	f.close()
 
-# ---------- global period ----------
+# --- Global Period
 
 func set_period(mode: String, from_key: String, to_key: String) -> void:
 	period.mode = mode
@@ -155,7 +188,7 @@ func set_period(mode: String, from_key: String, to_key: String) -> void:
 	period.to = to_key
 	EventBus.period_changed.emit()
 
-## Months in the current period ("all": from start_month to the latest month used).
+## Months in the current period ("all": from start_month to the latest month used)
 func period_months() -> Array[String]:
 	if period.mode == "all":
 		var first: String = project.start_month if project else Fmt.current_month()
@@ -166,7 +199,7 @@ func period_months() -> Array[String]:
 		return Fmt.months_between(first, last)
 	return Fmt.months_between(period.from, period.to)
 
-# ---------- recent files ----------
+# --- Recent Files
 
 func recent_files() -> Array:
 	if not FileAccess.file_exists(RECENT_PATH):
@@ -176,7 +209,8 @@ func recent_files() -> Array:
 	f.close()
 	if not (data is Array):
 		return []
-	# Drop entries whose file was moved or deleted outside the app.
+	
+	# Drop entries whose file was moved or deleted outside the app
 	var alive := []
 	for path in data:
 		if path is String and FileAccess.file_exists(path):
@@ -193,7 +227,7 @@ func _push_recent(path: String) -> void:
 	f.store_string(JSON.stringify(list))
 	f.close()
 
-# ---------- default categories for a new project ----------
+# --- Default Categories for a new project
 
 func _add_default_categories(target: FinanceProject) -> void:
 	var defaults := [

@@ -90,4 +90,5 @@ static func _build(data: Dictionary) -> Transaction:
 	t.method = data.get("method", "credit")
 	t.month = data.get("month", "")
 	t.notes = data.get("notes", "")
+	t.recurring_id = data.get("recurring_id", "")
 	return t

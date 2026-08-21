@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bcupg087yvfyd"]
 
 [ext_resource type="Script" uid="uid://c1ygrcesyuxxn" path="res://scripts/ui/main.gd" id="1_0ay0p"]
-[ext_resource type="PackedScene" uid="uid://clc3sywdiv3mw" path="res://scenes/ui/screens/main_menu.tscn" id="2_2p1s2"]
 
 [node name="Main" type="Control" unique_id=1427692742]
 layout_mode = 3
@@ -13,6 +12,7 @@ grow_vertical = 2
 script = ExtResource("1_0ay0p")
 
 [node name="Background" type="ColorRect" parent="." unique_id=307898191]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,10 +21,8 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.050980393, 0.06666667, 0.09019608, 1)
 
-[node name="MainMenu" parent="Background" unique_id=668298992 instance=ExtResource("2_2p1s2")]
-layout_mode = 1
-
 [node name="ScreenHost" type="MarginContainer" parent="." unique_id=1868174969]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,6 +31,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ToastLayer" type="VBoxContainer" parent="." unique_id=1331583292]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

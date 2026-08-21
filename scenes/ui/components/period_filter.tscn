@@ -10,17 +10,9 @@ theme_override_constants/separation = 8
 script = ExtResource("1_28687")
 
 [node name="ModeSelect" type="OptionButton" parent="." unique_id=805512437]
+unique_name_in_owner = true
 layout_mode = 2
-selected = 0
-item_count = 4
-popup/item_0/text = "Month"
-popup/item_0/id = 0
-popup/item_1/text = "Trimester"
-popup/item_1/id = 1
-popup/item_2/text = "Year"
-popup/item_2/id = 2
-popup/item_3/text = "All"
-popup/item_3/id = 3
 
 [node name="Picker" parent="." unique_id=561295435 instance=ExtResource("1_uf6c5")]
+unique_name_in_owner = true
 layout_mode = 2

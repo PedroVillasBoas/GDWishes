@@ -15,6 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_bxs3l")
 
 [node name="Col" type="VBoxContainer" parent="." unique_id=1842542747]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
@@ -52,6 +53,7 @@ size_flags_stretch_ratio = 0.6
 layout_mode = 2
 
 [node name="LineTitle" type="Label" parent="Col/ChartsRow/LinePanel/LineCol" unique_id=1980846858]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Balance Evolution"
 
@@ -74,6 +76,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="WishTitle" type="Label" parent="Col/ChartsRow/SidePanel/WishesPanel/WishesCol" unique_id=204482808]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Top Wishes"
 
@@ -88,6 +91,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="LimTitle" type="Label" parent="Col/ChartsRow/SidePanel/LimitsPanel/LimCol" unique_id=1320355540]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Montly Limits"
 
@@ -107,6 +111,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="DonutTitle" type="Label" parent="Col/ChartsRow2/DonutPanel/DonutCol" unique_id=610685406]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Spending by Category"
 
@@ -124,6 +129,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="BarTitle" type="Label" parent="Col/ChartsRow2/BarPanel/BarCol" unique_id=1843767816]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Inputs × Outputs"
 
@@ -134,18 +140,33 @@ layout_mode = 2
 script = ExtResource("4_bxs3l")
 
 [node name="CashflowPanel" type="PanelContainer" parent="Col" unique_id=570185772]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="CfCol" type="VBoxContainer" parent="Col/CashflowPanel" unique_id=1479041272]
 layout_mode = 2
 
-[node name="CfTitle" type="Label" parent="Col/CashflowPanel/CfCol" unique_id=1772733260]
+[node name="CfHeader" type="HBoxContainer" parent="Col/CashflowPanel/CfCol" unique_id=2051049218]
 layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CfTitle" type="Label" parent="Col/CashflowPanel/CfCol/CfHeader" unique_id=1772733260]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Cash Flow (with projection)"
+
+[node name="CfExpandButton" type="Button" parent="Col/CashflowPanel/CfCol/CfHeader" unique_id=238321821]
+unique_name_in_owner = true
+layout_mode = 2
+flat = true
 
 [node name="CfTable" type="Tree" parent="Col/CashflowPanel/CfCol" unique_id=1077395493]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
+size_flags_vertical = 3
 column_titles_visible = true
 hide_root = true
+select_mode = 1

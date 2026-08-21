@@ -2,11 +2,11 @@ extends VBoxContainer
 
 signal value_changed
 
-@onready var _amount: LineEdit = $Row/AmountEdit
-@onready var _currency: OptionButton = $Row/CurrencySelect
-@onready var _rate_row: HBoxContainer = $RateRow
-@onready var _rate: LineEdit = $RateRow/RateEdit
-@onready var _preview: Label = $Preview
+@onready var _amount: LineEdit = %AmountEdit
+@onready var _currency: OptionButton = %CurrencySelect
+@onready var _rate_row: HBoxContainer = %RateRow
+@onready var _rate: LineEdit = %RateEdit
+@onready var _preview: Label = %Preview
 
 func _ready() -> void:
 	_amount.text_changed.connect(func(_t): _refresh())

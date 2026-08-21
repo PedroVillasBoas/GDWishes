@@ -7,7 +7,17 @@ signal slice_clicked(label: String)
 var slices: Array[Dictionary] = []
 var _hover := -1
 
+func _ready() -> void:
+	super()
+	# The highlighted slice has to drop together with the tooltip, otherwise it
+	# stays lit after the cursor has left the chart.
+	mouse_exited.connect(func():
+		_hover = -1
+		queue_redraw())
+
 func set_data(data: Array[Dictionary]) -> void:
+	clear_tooltip()   # stale label from the previous dataset must not survive a refresh
+	_hover = -1
 	slices = data
 	slices.sort_custom(func(a, b): return a.value > b.value)
 	play_intro()

@@ -1,37 +1,75 @@
-extends ScrollContainer
-## Settings screen | application preferences (theme / font / autosave), per-project variables, and the Google Sheet CSV importer
+extends TabContainer
+## Settings screen | grouped into tabs:
+##   Appearance  — theme, font
+##   Preferences — language, date format, autosave
+##   Project     — per-project variables
+##
+## Tab titles are set from code because TabContainer otherwise shows raw node names,
+## which cannot be translated.
 
+const TAB_KEYS := ["set.tab_appearance", "set.tab_preferences", "set.tab_project"]
+
+@onready var _theme_label: Label = %LTheme
+@onready var _font_label: Label = %LFont
+@onready var _language_label: Label = %LLanguage
+@onready var _date_label: Label = %LDateFormat
+@onready var _autosave_label: Label = %LAutosave
+@onready var _interval_label: Label = %LInterval
 @onready var _theme_select: OptionButton = %ThemeSelect
 @onready var _font_select: OptionButton = %FontSelect
+@onready var _language_select: OptionButton = %LanguageSelect
+@onready var _date_select: OptionButton = %DateFormatSelect
 @onready var _autosave_check: CheckButton = %AutosaveCheck
 @onready var _autosave_spin: SpinBox = %AutosaveSpin
+@onready var _name_label: Label = %L1
+@onready var _rate_label: Label = %L2
+@onready var _salary_usd_label: Label = %L3
+@onready var _salary_brl_label: Label = %L4
+@onready var _hours_label: Label = %L5
 @onready var _name_edit: LineEdit = %NameEdit
 @onready var _rate_edit: LineEdit = %RateEdit
 @onready var _salary_usd: LineEdit = %SalaryUsdEdit
 @onready var _salary_brl: LineEdit = %SalaryBrlEdit
 @onready var _hours_spin: SpinBox = %HoursSpin
 @onready var _apply_button: Button = %ApplyButton
-@onready var _import_button: Button = %ImportButton
-@onready var _import_dialog: FileDialog = $Col/ImportDialog
 
 func _ready() -> void:
 	# A FileDialog left visible in the editor opens the moment this screen loads —
 	# that was the "Settings instantly opens the file system" bug.
 	UiUtils.hide_dialogs(self)
+	_apply_language()
 	_fill_app_settings()
 	_fill_project_settings()
-	Icons.decorate(_apply_button, "save", "Aplicar")
-	Icons.decorate(_import_button, "open", "Importar pasta de CSVs…")
 	_apply_button.pressed.connect(_apply_project_settings)
-	_import_button.pressed.connect(
-		_import_dialog.popup_centered.bind(Vector2i(800, 500)))
-	_import_dialog.dir_selected.connect(_import_folder)
+	Lang.language_changed.connect(_on_language_changed)
 
-# --- Application Settings
+func _apply_language() -> void:
+	for i in mini(TAB_KEYS.size(), get_tab_count()):
+		set_tab_title(i, Lang.t(TAB_KEYS[i]))
+	_theme_label.text = Lang.t("set.theme")
+	_font_label.text = Lang.t("set.font")
+	_language_label.text = Lang.t("set.language")
+	_date_label.text = Lang.t("set.date_format")
+	_autosave_label.text = Lang.t("set.autosave")
+	_interval_label.text = Lang.t("set.autosave_interval")
+	_name_label.text = Lang.t("set.project_name")
+	_rate_label.text = Lang.t("set.rate")
+	_salary_usd_label.text = Lang.t("set.salary_usd")
+	_salary_brl_label.text = Lang.t("set.salary_brl")
+	_hours_label.text = Lang.t("set.hours")
+	Icons.decorate(_apply_button, "save", Lang.t("generic.apply"))
+
+## The language switch rebuilds this screen too, otherwise the settings page would
+## be the only one still showing the previous language.
+func _on_language_changed() -> void:
+	_apply_language()
+	var font_index := _font_select.selected
+	_font_select.set_item_text(0, Lang.t("set.theme_default_font"))
+	_font_select.selected = font_index
+
+# --- Appearance + Preferences
 
 func _fill_app_settings() -> void:
-	# Both lists come from the ThemeRegistry resource 
-	# Adding a theme or a font there is enough to make it selectable here, with no code change
 	_theme_select.clear()
 	for entry in Themes.available_themes():
 		if entry == null:
@@ -48,22 +86,54 @@ func _fill_app_settings() -> void:
 		if entry.index == Themes.current_font_index:
 			_font_select.selected = _font_select.item_count - 1
 
+	_language_select.clear()
+	for entry in Lang.LANGUAGES:
+		_language_select.add_item(entry.name)
+		_language_select.set_item_metadata(_language_select.item_count - 1, entry.id)
+		if entry.id == Lang.current:
+			_language_select.selected = _language_select.item_count - 1
+
+	_date_select.clear()
+	for fmt in DateMask.available_formats():
+		_date_select.add_item(fmt)
+		_date_select.set_item_metadata(_date_select.item_count - 1, fmt)
+		if fmt == DateMask.current_format():
+			_date_select.selected = _date_select.item_count - 1
+
 	_autosave_check.button_pressed = App.app_settings.autosave_enabled
+	_autosave_spin.min_value = 5
+	_autosave_spin.max_value = 600
+	_autosave_spin.step = 5
 	_autosave_spin.value = float(App.app_settings.autosave_interval)
 	_autosave_spin.editable = _autosave_check.button_pressed
 
+	# Values are assigned first and the signals connected afterwards: setting
+	# `button_pressed` / `value` from code emits them, which would immediately
+	# write the current settings back to disk and pop a toast on every open.
 	_theme_select.item_selected.connect(_on_theme_selected)
 	_font_select.item_selected.connect(_on_font_selected)
+	_language_select.item_selected.connect(_on_language_selected)
+	_date_select.item_selected.connect(_on_date_format_selected)
 	_autosave_check.toggled.connect(_on_autosave_toggled)
 	_autosave_spin.value_changed.connect(_on_autosave_interval_changed)
 
 func _on_theme_selected(index: int) -> void:
 	Themes.set_theme_id(_theme_select.get_item_metadata(index))
-	EventBus.toast("Tema aplicado.", "success")
+	EventBus.toast(Lang.t("set.theme_applied"), "success")
 
 func _on_font_selected(index: int) -> void:
 	Themes.set_font_index(int(_font_select.get_item_metadata(index)))
-	EventBus.toast("Fonte aplicada.", "success")
+	EventBus.toast(Lang.t("set.font_applied"), "success")
+
+func _on_language_selected(index: int) -> void:
+	Lang.set_language(String(_language_select.get_item_metadata(index)))
+	EventBus.toast(Lang.t("set.language_applied"), "success")
+
+func _on_date_format_selected(index: int) -> void:
+	App.set_app_setting("date_format", String(_date_select.get_item_metadata(index)))
+	# Every date field re-reads the format when its screen is rebuilt.
+	EventBus.notify("settings")
+	EventBus.toast(Lang.t("set.date_applied"), "success")
 
 func _on_autosave_toggled(enabled: bool) -> void:
 	App.set_app_setting("autosave_enabled", enabled)
@@ -72,7 +142,7 @@ func _on_autosave_toggled(enabled: bool) -> void:
 func _on_autosave_interval_changed(value: float) -> void:
 	App.set_app_setting("autosave_interval", value)
 
-# --- Project Settings
+# --- Project
 
 func _fill_project_settings() -> void:
 	var p := App.project
@@ -86,7 +156,7 @@ func _apply_project_settings() -> void:
 	var p := App.project
 	var new_name := _name_edit.text.strip_edges()
 	if new_name.is_empty():
-		EventBus.toast("O projeto precisa de um nome.", "error")
+		EventBus.toast(Lang.t("set.name_required"), "error")
 		return
 	p.name = new_name
 	p.rate_usd_brl = Money.parse_rate(_rate_edit.text)
@@ -94,15 +164,4 @@ func _apply_project_settings() -> void:
 	p.base_salary_brl_cents = Money.parse_brl(_salary_brl.text)
 	p.hours_per_day = int(_hours_spin.value)
 	App.touch("settings")
-	EventBus.toast("Configurações aplicadas.", "success")
-
-# --- CSV Import | This will change later
-
-func _import_folder(folder: String) -> void:
-	var result := SheetImporter.import_folder(App.project, folder)
-	if not result.ok:
-		EventBus.toast(result.error, "error")
-		return
-	App.touch("transactions")
-	App.touch("categories")
-	EventBus.toast(result.report.strip_edges(), "success")
+	EventBus.toast(Lang.t("set.applied"), "success")

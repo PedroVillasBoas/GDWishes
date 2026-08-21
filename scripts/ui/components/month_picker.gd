@@ -3,24 +3,30 @@ extends HBoxContainer
 
 signal month_changed(key: String)
 
+@onready var _prev: Button = %PrevButton
+@onready var _next: Button = %NextButton
+@onready var _label: Button = %MonthLabel
+
 var month: String = "":
 	set(value):
 		month = value
-		if is_inside_tree():
-			$MonthLabel.text = Fmt.month_label(value, true)
+		if is_node_ready():
+			_label.text = Fmt.month_label(value, true)
 
 func _ready() -> void:
-	$PrevButton.text = ""
-	$NextButton.text = ""
-	$PrevButton.icon = Icons.get_icon("chevron_left")
-	$NextButton.icon = Icons.get_icon("chevron_right")
+	_prev.text = ""
+	_next.text = ""
+	_prev.icon = Icons.get_icon("chevron_left")
+	_next.icon = Icons.get_icon("chevron_right")
 	if month == "":
 		month = Fmt.current_month()
 	else:
-		$MonthLabel.text = Fmt.month_label(month, true)
-	$PrevButton.pressed.connect(func(): _shift(-1))
-	$NextButton.pressed.connect(func(): _shift(1))
-	$MonthLabel.pressed.connect(_shift_to_now)
+		_label.text = Fmt.month_label(month, true)
+	_prev.pressed.connect(func(): _shift(-1))
+	_next.pressed.connect(func(): _shift(1))
+	_label.pressed.connect(_shift_to_now)
+	# Month names are translated, so the label has to be redrawn on a language switch.
+	Lang.language_changed.connect(func(): _label.text = Fmt.month_label(month, true))
 
 func _shift(delta: int) -> void:
 	month = Fmt.add_months(month, delta)

@@ -46,11 +46,13 @@ static func pending_confirmations(p: FinanceProject, month: String) -> Array[Dic
 
 static func _has_generated(p: FinanceProject, recurring_id: String, month: String) -> bool:
 	for t in p.transactions:
-		if t.month == month and t.notes.begins_with("[rec:%s]" % recurring_id):
+		if t.month == month and t.recurring_id == recurring_id:
 			return true
 	return false
 
-## Confirms a recurring item for the month -> generates the actual transaction (marked in notes)
+## Confirms a recurring item for the month -> generates the actual transaction.
+## The link back to the recurring entry lives in `recurring_id`, so the user's
+## notes field stays empty and under their control.
 static func confirm(p: FinanceProject, entry: Dictionary, month: String, amount_cents: int) -> void:
 	var obj = entry.obj
 	var is_income: bool = entry.kind == "income"
@@ -63,5 +65,6 @@ static func confirm(p: FinanceProject, entry: Dictionary, month: String, amount_
 		"rate": Money.RATE_ONE, "amount_cents": amount_cents,
 		"category_id": obj.category_id, "method": "pix",
 		"date": month + "-01", "month": month,
-		"notes": "[rec:%s] gerado automaticamente" % obj.id,
+		"notes": "",
+		"recurring_id": obj.id,
 	})

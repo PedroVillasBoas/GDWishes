@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_o4kxk")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=717636716]
+[node name="Background" type="ColorRect" parent="." unique_id=717636716]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,7 +40,9 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 
 [node name="Sidebar" type="PanelContainer" parent="Layout" unique_id=318600734]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(220, 0)
+clip_contents = true
 layout_mode = 2
 
 [node name="SideCol" type="VBoxContainer" parent="Layout/Sidebar" unique_id=1482006033]
@@ -48,18 +50,27 @@ layout_mode = 2
 theme_override_constants/separation = 6
 
 [node name="ProjectName" type="Label" parent="Layout/Sidebar/SideCol" unique_id=1651278088]
+unique_name_in_owner = true
 layout_mode = 2
 clip_text = true
 
 [node name="SaveState" type="Label" parent="Layout/Sidebar/SideCol" unique_id=1275265251]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Saved"
 clip_text = true
+
+[node name="CollapseButton" type="Button" parent="Layout/Sidebar/SideCol" unique_id=401080831]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+flat = true
 
 [node name="Sep1" type="HSeparator" parent="Layout/Sidebar/SideCol" unique_id=234586620]
 layout_mode = 2
 
 [node name="NavDashboard" type="Button" parent="Layout/Sidebar/SideCol" unique_id=1891398824]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Dashboard"
@@ -67,6 +78,7 @@ icon = ExtResource("1_nj5gw")
 alignment = 0
 
 [node name="NavTransactions" type="Button" parent="Layout/Sidebar/SideCol" unique_id=653460477]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Transactions"
@@ -74,6 +86,7 @@ icon = ExtResource("2_vd3nk")
 alignment = 0
 
 [node name="NavWishes" type="Button" parent="Layout/Sidebar/SideCol" unique_id=1166483162]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Wishes"
@@ -81,6 +94,7 @@ icon = ExtResource("3_o4kxk")
 alignment = 0
 
 [node name="NavCategories" type="Button" parent="Layout/Sidebar/SideCol" unique_id=1916865017]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Categories & Limits"
@@ -88,6 +102,7 @@ icon = ExtResource("4_bmj1l")
 alignment = 0
 
 [node name="NavRecurring" type="Button" parent="Layout/Sidebar/SideCol" unique_id=752658549]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Recurring"
@@ -95,6 +110,7 @@ icon = ExtResource("5_rucdi")
 alignment = 0
 
 [node name="NavSettings" type="Button" parent="Layout/Sidebar/SideCol" unique_id=1001182803]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Settings"
@@ -106,6 +122,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="SaveButton" type="Button" parent="Layout/Sidebar/SideCol" unique_id=901876895]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Save"
@@ -113,6 +130,7 @@ icon = ExtResource("7_rp87t")
 alignment = 0
 
 [node name="CloseButton" type="Button" parent="Layout/Sidebar/SideCol" unique_id=1648974753]
+unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 text = "Close Project"
@@ -131,6 +149,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="ScreenTitle" type="Label" parent="Layout/Content/Header/HeaderRow" unique_id=1273975109]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="HSpacer" type="Control" parent="Layout/Content/Header/HeaderRow" unique_id=2082555034]
@@ -141,6 +160,7 @@ size_flags_horizontal = 3
 layout_mode = 2
 
 [node name="ScreenHost" type="MarginContainer" parent="Layout/Content" unique_id=1193466698]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 20
@@ -149,7 +169,8 @@ theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
 [node name="SaveDialog" type="FileDialog" parent="." unique_id=307913744]
+unique_name_in_owner = true
 oversampling_override = 1.0
 access = 2
-filters = PackedStringArray(".gdwish")
+filters = PackedStringArray("*.gdwish ; GDWishes Project")
 use_native_dialog = true
